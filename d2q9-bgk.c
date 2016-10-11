@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
   initialise(paramfile, obstaclefile, &params, &cells, &tmp_cells, &obstacles, &av_vels);
 
   /* iterate for maxIters timesteps */
-  gettimeofday(&timstr, NULL);
+  gettimeofday(&timstr, NULL);        
   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
 
   for (int tt = 0; tt < params.maxIters; tt++)
@@ -550,17 +550,21 @@ int initialise(const char* paramfile, const char* obstaclefile,
       (*cells_ptr)[ii * params->nx + jj].speeds[6] = w2;
       (*cells_ptr)[ii * params->nx + jj].speeds[7] = w2;
       (*cells_ptr)[ii * params->nx + jj].speeds[8] = w2;
+
+      /* first set all cells in obstacle array to zero */
+      (*obstacles_ptr)[ii * params->nx + jj] = 0;
+
     }
   }
 
-  /* first set all cells in obstacle array to zero */
-  for (int ii = 0; ii < params->ny; ii++)
-  {
-    for (int jj = 0; jj < params->nx; jj++)
-    {
-      (*obstacles_ptr)[ii * params->nx + jj] = 0;
-    }
-  }
+  // /* first set all cells in obstacle array to zero */
+  // for (int ii = 0; ii < params->ny; ii++)
+  // {
+  //   for (int jj = 0; jj < params->nx; jj++)
+  //   {
+  //     (*obstacles_ptr)[ii * params->nx + jj] = 0;
+  //   }
+  // }
 
   /* open the obstacle data file */
   fp = fopen(obstaclefile, "r");
