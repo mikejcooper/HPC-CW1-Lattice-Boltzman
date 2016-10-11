@@ -537,6 +537,9 @@ int initialise(const char* paramfile, const char* obstaclefile,
   {
     for (int jj = 0; jj < params->nx; jj++)
     {
+
+      x = params->nx
+      y = params->ny
       /* centre */
       (*cells_ptr)[ii * params->nx + jj].speeds[0] = w0;
       /* axis directions */
