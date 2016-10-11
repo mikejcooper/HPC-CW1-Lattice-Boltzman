@@ -533,18 +533,11 @@ int initialise(const char* paramfile, const char* obstaclefile,
   double w1 = params->density      / 9.0;
   double w2 = params->density      / 36.0;
 
+// ny, nx = 128
   for (int ii = 0; ii < params->ny; ii++)
   {
     for (int jj = 0; jj < params->nx; jj++)
-    {
-
-      int volatile x = params->nx;
-      int volatile y = params->ny;
-      printf("x = %d \n", x);
-      printf("y = %d \n", y);
-      my_delay();
-        
-
+    {   
       /* centre */
       (*cells_ptr)[ii * params->nx + jj].speeds[0] = w0;
       /* axis directions */
@@ -758,6 +751,13 @@ void my_delay(){
         }
       }
 }
+
+
+
+// d2q9-bgk input_128x128.params obstacles_128x128.dat
+//     printf("value: %d==\n", tt);
+
+
 
 
 
