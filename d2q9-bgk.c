@@ -543,8 +543,12 @@ int initialise(const char* paramfile, const char* obstaclefile,
       printf("x = %d \n", x);
       printf("y = %d \n", y);
 
-      delay(100000);                         
-
+      for ( c = 1 ; c <= 327670 ; c++ ) {
+        for ( d = 1 ; d <= 327670 ; d++ ) {
+          
+        }
+      }
+        
 
       /* centre */
       (*cells_ptr)[ii * params->nx + jj].speeds[0] = w0;
