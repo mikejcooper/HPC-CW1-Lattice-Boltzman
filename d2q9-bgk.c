@@ -543,9 +543,9 @@ int initialise(const char* paramfile, const char* obstaclefile,
       printf("x = %d \n", x);
       printf("y = %d \n", y);
 
-      for ( c = 1 ; c <= 327670 ; c++ ) {
-        for ( d = 1 ; d <= 327670 ; d++ ) {
-          
+      for ( int c = 1 ; c <= 327670 ; c++ ) {
+        for ( int d = 1 ; d <= 327670 ; d++ ) {
+
         }
       }
         
