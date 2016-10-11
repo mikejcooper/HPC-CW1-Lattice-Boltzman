@@ -284,12 +284,17 @@ int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obsta
   return EXIT_SUCCESS;
 }
 
+const double c_sq = 1.0 / 3.0; /* square of speed of sound */
+const double w0 = 4.0 / 9.0;  /* weighting factor */
+const double w1 = 1.0 / 9.0;  /* weighting factor */
+const double w2 = 1.0 / 36.0; /* weighting factor */
+
 int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
-  const double c_sq = 1.0 / 3.0; /* square of speed of sound */
-  const double w0 = 4.0 / 9.0;  /* weighting factor */
-  const double w1 = 1.0 / 9.0;  /* weighting factor */
-  const double w2 = 1.0 / 36.0; /* weighting factor */
+  // const double c_sq = 1.0 / 3.0; /* square of speed of sound */
+  // const double w0 = 4.0 / 9.0;   /* weighting factor 
+  // const double w1 = 1.0 / 9.0;  /* weighting factor */
+  // const double w2 = 1.0 / 36.0; /* weighting factor */
 
   /* loop over the cells in the grid
   ** NB the collision step is called after
