@@ -540,6 +540,8 @@ int initialise(const char* paramfile, const char* obstaclefile,
 
       int volatile x = params->nx;
       int volatile y = params->ny;
+      printf("x = %d \n", x);
+      printf("y = %d \n", y);
       /* centre */
       (*cells_ptr)[ii * params->nx + jj].speeds[0] = w0;
       /* axis directions */
