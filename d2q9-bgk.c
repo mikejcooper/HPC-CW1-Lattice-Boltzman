@@ -538,8 +538,8 @@ int initialise(const char* paramfile, const char* obstaclefile,
     for (int jj = 0; jj < params->nx; jj++)
     {
 
-      int x = params->nx;
-      int y = params->ny;
+      int volatile x = params->nx;
+      int volatile y = params->ny;
       /* centre */
       (*cells_ptr)[ii * params->nx + jj].speeds[0] = w0;
       /* axis directions */
