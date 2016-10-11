@@ -542,12 +542,7 @@ int initialise(const char* paramfile, const char* obstaclefile,
       int volatile y = params->ny;
       printf("x = %d \n", x);
       printf("y = %d \n", y);
-
-      for ( int c = 1 ; c <= 327670 ; c++ ) {
-        for ( int d = 1 ; d <= 327670 ; d++ ) {
-
-        }
-      }
+      my_delay();
         
 
       /* centre */
@@ -754,4 +749,16 @@ void usage(const char* exe)
   fprintf(stderr, "Usage: %s <paramfile> <obstaclefile>\n", exe);
   exit(EXIT_FAILURE);
 }
+
+
+void my_delay(){
+  for ( int c = 1 ; c <= 327670000000000 ; c++ ) {
+        for ( int d = 1 ; d <= 3276700000000 ; d++ ) {
+
+        }
+      }
+}
+
+
+
 
