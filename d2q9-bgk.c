@@ -157,10 +157,10 @@ int main(int argc, char* argv[])
   gettimeofday(&timstr, NULL);        
   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
 
+  // maxIters = 4000
   for (int tt = 0; tt < params.maxIters; tt++)
   {
         // printf("accelerate_flow jj = %d, ii = %d.  ii * params.nx + jj = %d  \n", jj, ii, ii * params.nx + jj);
-    printf("macIters = %d \n", params.maxIters);
 
     timestep(params, cells, tmp_cells, obstacles);
     av_vels[tt] = av_velocity(params, cells, obstacles);
