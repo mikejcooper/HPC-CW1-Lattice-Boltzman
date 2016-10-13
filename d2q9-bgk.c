@@ -339,6 +339,8 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
     for (int jj = 0; jj < params.nx; jj++)
     {
       int index = ii * params.nx + jj;
+      t_speed current_cell = cells[index];
+      t_speed tmp_current_cell = tmp_cells[index];
 
       /* don't consider occupied cells */
       if (!obstacles[index])
@@ -349,24 +351,24 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
 
         for (int kk = 0; kk < NSPEEDS; kk++)
         {
-          local_density += tmp_cells[index].speeds[kk];
+          local_density += tmp_current_cell.speeds[kk];
         }
 
         /* compute x velocity component */
-        double u_x = (tmp_cells[index].speeds[1]
-                      + tmp_cells[index].speeds[5]
-                      + tmp_cells[index].speeds[8]
-                      - (tmp_cells[index].speeds[3]
-                         + tmp_cells[index].speeds[6]
-                         + tmp_cells[index].speeds[7]))
+        double u_x = (tmp_current_cell.speeds[1]
+                      + tmp_current_cell.speeds[5]
+                      + tmp_current_cell.speeds[8]
+                      - (tmp_current_cell.speeds[3]
+                         + tmp_current_cell.speeds[6]
+                         + tmp_current_cell.speeds[7]))
                      / local_density;
         /* compute y velocity component */
-        double u_y = (tmp_cells[index].speeds[2]
-                      + tmp_cells[index].speeds[5]
-                      + tmp_cells[index].speeds[6]
-                      - (tmp_cells[index].speeds[4]
-                         + tmp_cells[index].speeds[7]
-                         + tmp_cells[index].speeds[8]))
+        double u_y = (tmp_current_cell.speeds[2]
+                      + tmp_current_cell.speeds[5]
+                      + tmp_current_cell.speeds[6]
+                      - (tmp_current_cell.speeds[4]
+                         + tmp_current_cell.speeds[7]
+                         + tmp_current_cell.speeds[8]))
                      / local_density;
 
         /* velocity squared */
@@ -421,9 +423,9 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
         /* relaxation step */
         for (int kk = 0; kk < NSPEEDS; kk++)
         {
-          cells[index].speeds[kk] = tmp_cells[index].speeds[kk]
+          current_cell.speeds[kk] = tmp_current_cell.speeds[kk]
                                                   + params.omega
-                                                  * (d_equ[kk] - tmp_cells[index].speeds[kk]);
+                                                  * (d_equ[kk] - tmp_current_cell.speeds[kk]);
         }
       }
     }
