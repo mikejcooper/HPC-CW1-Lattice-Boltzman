@@ -259,15 +259,17 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       /* propagate densities to neighbouring cells, following
       ** appropriate directions of travel and writing into
       ** scratch space grid */
-      tmp_cells[ii * params.nx + jj].speeds[0]    = cells[index].speeds[0]; /* central cell, no movement */
-      tmp_cells[ii * params.nx + x_e].speeds[1]   = cells[index].speeds[1]; /* east */
-      tmp_cells[y_n * params.nx + jj].speeds[2]   = cells[index].speeds[2]; /* north */
-      tmp_cells[ii * params.nx + x_w].speeds[3]   = cells[index].speeds[3]; /* west */
-      tmp_cells[y_s * params.nx + jj].speeds[4]   = cells[index].speeds[4]; /* south */
-      tmp_cells[y_n * params.nx + x_e].speeds[5]  = cells[index].speeds[5]; /* north-east */
-      tmp_cells[y_n * params.nx + x_w].speeds[6]  = cells[index].speeds[6]; /* north-west */
-      tmp_cells[y_s * params.nx + x_w].speeds[7]  = cells[index].speeds[7]; /* south-west */
-      tmp_cells[y_s * params.nx + x_e].speeds[8]  = cells[index].speeds[8]; /* south-east */
+      t_speed* current_cell = cells[index];
+
+      tmp_cells[ii * params.nx + jj].speeds[0]    = current_cell.speeds[0]; /* central cell, no movement */
+      tmp_cells[ii * params.nx + x_e].speeds[1]   = current_cell.speeds[1]; /* east */
+      tmp_cells[y_n * params.nx + jj].speeds[2]   = current_cell.speeds[2]; /* north */
+      tmp_cells[ii * params.nx + x_w].speeds[3]   = current_cell.speeds[3]; /* west */
+      tmp_cells[y_s * params.nx + jj].speeds[4]   = current_cell.speeds[4]; /* south */
+      tmp_cells[y_n * params.nx + x_e].speeds[5]  = current_cell.speeds[5]; /* north-east */
+      tmp_cells[y_n * params.nx + x_w].speeds[6]  = current_cell.speeds[6]; /* north-west */
+      tmp_cells[y_s * params.nx + x_w].speeds[7]  = current_cell.speeds[7]; /* south-west */
+      tmp_cells[y_s * params.nx + x_e].speeds[8]  = current_cell.speeds[8]; /* south-east */
 
       // printf("value: %d==\n", ii * params.nx + jj);
       // printf("value: %d==\n", ii * params.nx + x_e);
@@ -332,6 +334,12 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
+
+  int STEP = 5;
+  for(int ii = 0; ii<N; i+=STEP){
+
+  }
+  for(i=j; i<min(N, j+B); ++i){
   for (int ii = 0; ii < params.ny; ii++)
   {
     for (int jj = 0; jj < params.nx; jj++)
