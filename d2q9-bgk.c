@@ -299,16 +299,19 @@ int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obsta
       /* if the cell contains an obstacle */
       if (obstacles[index])
       {  
+        t_speed current_cell = cells[index];
+        t_speed tmp_current_cell = tmp_cells[index];
+
         /* called after propagate, so taking values from scratch space
         ** mirroring, and writing into main grid */
-        cells[index].speeds[1] = tmp_cells[index].speeds[3];
-        cells[index].speeds[2] = tmp_cells[index].speeds[4];
-        cells[index].speeds[3] = tmp_cells[index].speeds[1];
-        cells[index].speeds[4] = tmp_cells[index].speeds[2];
-        cells[index].speeds[5] = tmp_cells[index].speeds[7];
-        cells[index].speeds[6] = tmp_cells[index].speeds[8];
-        cells[index].speeds[7] = tmp_cells[index].speeds[5];
-        cells[index].speeds[8] = tmp_cells[index].speeds[6];
+        current_cell.speeds[1] = tmp_current_cell.speeds[3];
+        current_cell.speeds[2] = tmp_current_cell.speeds[4];
+        current_cell.speeds[3] = tmp_current_cell.speeds[1];
+        current_cell.speeds[4] = tmp_current_cell.speeds[2];
+        current_cell.speeds[5] = tmp_current_cell.speeds[7];
+        current_cell.speeds[6] = tmp_current_cell.speeds[8];
+        current_cell.speeds[7] = tmp_current_cell.speeds[5];
+        current_cell.speeds[8] = tmp_current_cell.speeds[6];
       }
     }
   }
