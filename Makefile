@@ -3,7 +3,7 @@
 EXE=d2q9-bgk
 
 CC=icc
-CFLAGS= -xSSE4.2 
+CFLAGS= 
 # CFLAGS= -std=c99 -O3 -flto
 # CFLAGS= -std=c99 -Wall -O3 -DDEBUG -g
 LIBS = -lm
