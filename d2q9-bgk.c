@@ -158,6 +158,8 @@ int main(int argc, char* argv[])
   gettimeofday(&timstr, NULL);        
   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
 
+  accelerate_flow(params, cells, obstacles);
+
   // maxIters = 4000
   for (int tt = 0; tt < params.maxIters; tt++)
   {
@@ -194,7 +196,7 @@ int main(int argc, char* argv[])
 
 int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
-  accelerate_flow(params, cells, obstacles);
+  // accelerate_flow(params, cells, obstacles);
   propagate(params, cells, tmp_cells);
   rebound(params, cells, tmp_cells, obstacles);
   collision(params, cells, tmp_cells, obstacles);
@@ -293,10 +295,11 @@ int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obsta
   {
     for (int jj = 0; jj < params.nx; jj++)
     {
+      int index = ii * params.nx + jj;
+
       /* if the cell contains an obstacle */
-      if (obstacles[ii * params.nx + jj])
-      {
-        int index = ii * params.nx + jj;
+      if (obstacles[index])
+      {  
         /* called after propagate, so taking values from scratch space
         ** mirroring, and writing into main grid */
         cells[index].speeds[1] = tmp_cells[index].speeds[3];
@@ -323,6 +326,10 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
   const double w1 = 1.0 / 9.0;  /* weighting factor */
   const double w2 = 1.0 / 36.0; /* weighting factor */
 
+  /* compute weighting factors */
+  double w1 = params.density * params.accel / 9.0;
+  double w2 = params.density * params.accel / 36.0;
+
   /* loop over the cells in the grid
   ** NB the collision step is called after
   ** the propagate step and so values of interest
@@ -346,20 +353,20 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
         }
 
         /* compute x velocity component */
-        double u_x = (tmp_cells[ii * params.nx + jj].speeds[1]
-                      + tmp_cells[ii * params.nx + jj].speeds[5]
-                      + tmp_cells[ii * params.nx + jj].speeds[8]
-                      - (tmp_cells[ii * params.nx + jj].speeds[3]
-                         + tmp_cells[ii * params.nx + jj].speeds[6]
-                         + tmp_cells[ii * params.nx + jj].speeds[7]))
+        double u_x = (tmp_cells[index].speeds[1]
+                      + tmp_cells[index].speeds[5]
+                      + tmp_cells[index].speeds[8]
+                      - (tmp_cells[index].speeds[3]
+                         + tmp_cells[index].speeds[6]
+                         + tmp_cells[index].speeds[7]))
                      / local_density;
         /* compute y velocity component */
-        double u_y = (tmp_cells[ii * params.nx + jj].speeds[2]
-                      + tmp_cells[ii * params.nx + jj].speeds[5]
-                      + tmp_cells[ii * params.nx + jj].speeds[6]
-                      - (tmp_cells[ii * params.nx + jj].speeds[4]
-                         + tmp_cells[ii * params.nx + jj].speeds[7]
-                         + tmp_cells[ii * params.nx + jj].speeds[8]))
+        double u_y = (tmp_cells[index].speeds[2]
+                      + tmp_cells[index].speeds[5]
+                      + tmp_cells[index].speeds[6]
+                      - (tmp_cells[index].speeds[4]
+                         + tmp_cells[index].speeds[7]
+                         + tmp_cells[index].speeds[8]))
                      / local_density;
 
         /* velocity squared */
@@ -417,6 +424,27 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
           cells[index].speeds[kk] = tmp_cells[index].speeds[kk]
                                                   + params.omega
                                                   * (d_equ[kk] - tmp_cells[index].speeds[kk]);
+        }
+
+
+
+        // -------------------accelerate_flow----------------------------------------------
+        
+        /* if the cell is not occupied and
+        ** we don't send a negative density */
+        if (!obstacles[index]
+            && (cells[index].speeds[3] - w1) > 0.0
+            && (cells[index].speeds[6] - w2) > 0.0
+            && (cells[index].speeds[7] - w2) > 0.0)
+        {
+          /* increase 'east-side' densities */
+          cells[index].speeds[1] += w1;
+          cells[index].speeds[5] += w2;
+          cells[index].speeds[8] += w2;
+          /* decrease 'west-side' densities */
+          cells[index].speeds[3] -= w1;
+          cells[index].speeds[6] -= w2;
+          cells[index].speeds[7] -= w2;
         }
       }
     }
