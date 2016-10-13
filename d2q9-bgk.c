@@ -263,7 +263,7 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 
       t_speed current_cell = cells[index];
 
-      tmp_current_cell.speeds[0]    = current_cell.speeds[0]; /* central cell, no movement */
+      tmp_cells[ii * params.nx + jj].speeds[0]    = cells[index].speeds[0]; /* central cell, no movement */
       tmp_cells[ii * params.nx + x_e].speeds[1]   = current_cell.speeds[1]; /* east */
       tmp_cells[y_n * params.nx + jj].speeds[2]   = current_cell.speeds[2]; /* north */
       tmp_cells[ii * params.nx + x_w].speeds[3]   = current_cell.speeds[3]; /* west */
@@ -597,7 +597,7 @@ int initialise(const char* paramfile, const char* obstaclefile,
     {   
 
 
-      int index = ii * params.nx + jj;
+      int index = ii * params->nx + jj;
       t_speed current_cell = (*cells_ptr)[index];
       /* centre */
       current_cell.speeds[0] = w0;
