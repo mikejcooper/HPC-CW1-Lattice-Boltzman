@@ -98,8 +98,10 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
 int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int write_values(const t_param params, t_speed* cells, int* obstacles, double* av_vels);
-//combine accelerate_flow, propagate, rebound, collision
-int combine(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+
+int shared(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+void my_delay();
+
 
 
 /* finalise, including freeing up allocated memory */
@@ -200,73 +202,72 @@ int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obst
   return EXIT_SUCCESS;
 }
 
-// int combine(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+// // collision variables
+// const double c_sq = 1.0 / 3.0; /* square of speed of sound */
+// const double w0 = 4.0 / 9.0;    weighting factor 
+// const double w1 = 1.0 / 9.0;  /* weighting factor */
+// const double w2 = 1.0 / 36.0; /* weighting factor */
+
+// int shared(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 // {
-// // accelerate_flow()
 //   /* compute weighting factors */
 //   double w1 = params.density * params.accel / 9.0;
 //   double w2 = params.density * params.accel / 36.0;
 
 //   /* modify the 2nd row of the grid */
-//   int ii = params.ny - 2;
-
-// // propagate()
-
-// // rebound()
-
-// // collision()
-//   const double c_sq = 1.0 / 3.0; /* square of speed of sound */
-//   const double w0 = 4.0 / 9.0;  /* weighting factor */
-//   const double w1 = 1.0 / 9.0;  /* weighting factor */
-//   const double w2 = 1.0 / 36.0; /* weighting factor */ 
-
-// /* loop over _all_ cells */
-//   for (int ii = 0; ii < params.ny; ii++)
+//   int iia = params.ny - 2;
+//   // array indexing: 16128 -> 16255
+//   for (int jj = 0; jj < params.nx; jj++)
 //   {
+//     // accelerate_flow
+
+//     /* if the cell is not occupied and
+//     ** we don't send a negative density */
+//     if (!obstacles[iia * params.nx + jj]
+//         && (cells[iia * params.nx + jj].speeds[3] - w1) > 0.0
+//         && (cells[iia * params.nx + jj].speeds[6] - w2) > 0.0
+//         && (cells[iia * params.nx + jj].speeds[7] - w2) > 0.0)
+//     {
+//       /* increase 'east-side' densities */
+//       cells[iia * params.nx + jj].speeds[1] += w1;
+//       cells[iia * params.nx + jj].speeds[5] += w2;
+//       cells[iia * params.nx + jj].speeds[8] += w2;
+//       /* decrease 'west-side' densities */
+//       cells[iia * params.nx + jj].speeds[3] -= w1;
+//       cells[iia * params.nx + jj].speeds[6] -= w2;
+//       cells[iia * params.nx + jj].speeds[7] -= w2;
+//     }
+
+//     // propagate
+
+//       /* determine indices of axis-direction neighbours
+//       ** respecting periodic boundary conditions (wrap around) */
+//     int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
+//     int y_n = (ii + 1) % params.ny; // Could move up
+
 //     for (int jj = 0; jj < params.nx; jj++)
 //     {
-//     // accelerate_flow()
-
-//       /* if the cell is not occupied and
-//       ** we don't send a negative density */
-//       if (!obstacles[ii * params.nx + jj]
-//           && (cells[ii * params.nx + jj].speeds[3] - w1) > 0.0
-//           && (cells[ii * params.nx + jj].speeds[6] - w2) > 0.0
-//           && (cells[ii * params.nx + jj].speeds[7] - w2) > 0.0)
-//       {
-//         /* increase 'east-side' densities */
-//         cells[ii * params.nx + jj].speeds[1] += w1;
-//         cells[ii * params.nx + jj].speeds[5] += w2;
-//         cells[ii * params.nx + jj].speeds[8] += w2;
-//         /* decrease 'west-side' densities */
-//         cells[ii * params.nx + jj].speeds[3] -= w1;
-//         cells[ii * params.nx + jj].speeds[6] -= w2;
-//         cells[ii * params.nx + jj].speeds[7] -= w2;
-//       }
-
-
-//     // propagate()
-//        /* determine indices of axis-direction neighbours
+//       /* determine indices of axis-direction neighbours
 //       ** respecting periodic boundary conditions (wrap around) */
-//       int y_n = (ii + 1) % params.ny;
 //       int x_e = (jj + 1) % params.nx;
-//       int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1);
 //       int x_w = (jj == 0) ? (jj + params.nx - 1) : (jj - 1);
 //       /* propagate densities to neighbouring cells, following
 //       ** appropriate directions of travel and writing into
 //       ** scratch space grid */
-//       tmp_cells[ii * params.nx + jj].speeds[0]  = cells[ii * params.nx + jj].speeds[0]; /* central cell, no movement */
-//       tmp_cells[ii * params.nx + x_e].speeds[1] = cells[ii * params.nx + jj].speeds[1]; /* east */
-//       tmp_cells[y_n * params.nx + jj].speeds[2]  = cells[ii * params.nx + jj].speeds[2]; /* north */
-//       tmp_cells[ii * params.nx + x_w].speeds[3] = cells[ii * params.nx + jj].speeds[3]; /* west */
-//       tmp_cells[y_s * params.nx + jj].speeds[4]  = cells[ii * params.nx + jj].speeds[4]; /* south */
-//       tmp_cells[y_n * params.nx + x_e].speeds[5] = cells[ii * params.nx + jj].speeds[5]; /* north-east */
-//       tmp_cells[y_n * params.nx + x_w].speeds[6] = cells[ii * params.nx + jj].speeds[6]; /* north-west */
-//       tmp_cells[y_s * params.nx + x_w].speeds[7] = cells[ii * params.nx + jj].speeds[7]; /* south-west */
-//       tmp_cells[y_s * params.nx + x_e].speeds[8] = cells[ii * params.nx + jj].speeds[8]; /* south-east */
+//       tmp_cells[ii * params.nx + jj].speeds[0]    = cells[ii * params.nx + jj].speeds[0]; /* central cell, no movement */
+//       tmp_cells[ii * params.nx + x_e].speeds[1]   = cells[ii * params.nx + jj].speeds[1]; /* east */
+//       tmp_cells[y_n * params.nx + jj].speeds[2]   = cells[ii * params.nx + jj].speeds[2]; /* north */
+//       tmp_cells[ii * params.nx + x_w].speeds[3]   = cells[ii * params.nx + jj].speeds[3]; /* west */
+//       tmp_cells[y_s * params.nx + jj].speeds[4]   = cells[ii * params.nx + jj].speeds[4]; /* south */
+//       tmp_cells[y_n * params.nx + x_e].speeds[5]  = cells[ii * params.nx + jj].speeds[5]; /* north-east */
+//       tmp_cells[y_n * params.nx + x_w].speeds[6]  = cells[ii * params.nx + jj].speeds[6]; /* north-west */
+//       tmp_cells[y_s * params.nx + x_w].speeds[7]  = cells[ii * params.nx + jj].speeds[7]; /* south-west */
+//       tmp_cells[y_s * params.nx + x_e].speeds[8]  = cells[ii * params.nx + jj].speeds[8]; /* south-east */
 
+//       // --------------------------------------------------------------------------------------------------
 
-//     // rebound()
+//       // rebound
+
 //       /* if the cell contains an obstacle */
 //       if (obstacles[ii * params.nx + jj])
 //       {
@@ -282,12 +283,14 @@ int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obst
 //         cells[ii * params.nx + jj].speeds[8] = tmp_cells[ii * params.nx + jj].speeds[6];
 //       }
 
+//       // ----------------------------------------------------------------------------------------------------
 
-//     // collision()
-//             /* don't consider occupied cells */
+//       // collision
+
+//       /* don't consider occupied cells */
 //       if (!obstacles[ii * params.nx + jj])
 //       {
-//         /* compute local density total */
+//          compute local density total 
 //         double local_density = 0.0;
 
 //         for (int kk = 0; kk < NSPEEDS; kk++)
@@ -366,12 +369,20 @@ int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obst
 //                                                   * (d_equ[kk] - tmp_cells[ii * params.nx + jj].speeds[kk]);
 //         }
 //       }
+    
+//     //------------------------------------------------------------------------------------------------------- 
+
 
 
 
 
 
 //     }
+
+
+
+
+
 //   }
 
 
@@ -418,13 +429,16 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
   /* loop over _all_ cells */
   for (int ii = 0; ii < params.ny; ii++)
   {
+    /* determine indices of axis-direction neighbours
+      ** respecting periodic boundary conditions (wrap around) */
+    int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
+    int y_n = (ii + 1) % params.ny; // Could move up
+
     for (int jj = 0; jj < params.nx; jj++)
     {
       /* determine indices of axis-direction neighbours
       ** respecting periodic boundary conditions (wrap around) */
-      int y_n = (ii + 1) % params.ny;
       int x_e = (jj + 1) % params.nx;
-      int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1);
       int x_w = (jj == 0) ? (jj + params.nx - 1) : (jj - 1);
       /* propagate densities to neighbouring cells, following
       ** appropriate directions of travel and writing into
@@ -438,6 +452,18 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       tmp_cells[y_n * params.nx + x_w].speeds[6]  = cells[ii * params.nx + jj].speeds[6]; /* north-west */
       tmp_cells[y_s * params.nx + x_w].speeds[7]  = cells[ii * params.nx + jj].speeds[7]; /* south-west */
       tmp_cells[y_s * params.nx + x_e].speeds[8]  = cells[ii * params.nx + jj].speeds[8]; /* south-east */
+      printf("value: %d==\n", ii * params.nx + jj);
+      printf("value: %d==\n", ii * params.nx + x_e);
+      printf("value: %d==\n", y_n * params.nx + jj);
+      printf("value: %d==\n", ii * params.nx + x_w);
+      printf("value: %d==\n", y_s * params.nx + jj);
+      printf("value: %d==\n", y_n * params.nx + x_e);
+      printf("value: %d==\n", y_n * params.nx + x_w);
+      printf("value: %d==\n", y_s * params.nx + x_w);
+      printf("value: %d==\n", y_s * params.nx + x_e);
+
+      my_delay();
+
     }
   }
 
@@ -471,15 +497,13 @@ int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obsta
   return EXIT_SUCCESS;
 }
 
-
-
-int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
-{
   const double c_sq = 1.0 / 3.0; /* square of speed of sound */
   const double w0 = 4.0 / 9.0;   /* weighting factor */
   const double w1 = 1.0 / 9.0;  /* weighting factor */
   const double w2 = 1.0 / 36.0; /* weighting factor */
 
+int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+{
   /* loop over the cells in the grid
   ** NB the collision step is called after
   ** the propagate step and so values of interest
