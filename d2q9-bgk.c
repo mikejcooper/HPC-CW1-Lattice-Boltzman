@@ -216,22 +216,21 @@ int accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   for (int jj = 0; jj < params.nx; jj++)
   {
     int index = ii * params.nx + jj;
-    t_speed current_cell = cells[index];
     /* if the cell is not occupied and
     ** we don't send a negative density */
     if (!obstacles[index]
-        && (current_cell.speeds[3] - w1) > 0.0
-        && (current_cell.speeds[6] - w2) > 0.0
-        && (current_cell.speeds[7] - w2) > 0.0)
+        && (cells[index].speeds[3] - w1) > 0.0
+        && (cells[index].speeds[6] - w2) > 0.0
+        && (cells[index].speeds[7] - w2) > 0.0)
     {
       /* increase 'east-side' densities */
-      current_cell.speeds[1] += w1;
-      current_cell.speeds[5] += w2;
-      current_cell.speeds[8] += w2;
+      cells[index].speeds[1] += w1;
+      cells[index].speeds[5] += w2;
+      cells[index].speeds[8] += w2;
       /* decrease 'west-side' densities */
-      current_cell.speeds[3] -= w1;
-      current_cell.speeds[6] -= w2;
-      current_cell.speeds[7] -= w2;
+      cells[index].speeds[3] -= w1;
+      cells[index].speeds[6] -= w2;
+      cells[index].speeds[7] -= w2;
     }
 
   }
