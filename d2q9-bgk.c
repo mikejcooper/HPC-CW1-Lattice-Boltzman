@@ -243,6 +243,11 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
   /* loop over _all_ cells */
   for (int ii = 0; ii < params.ny; ii++)
   {
+    /* determine indices of axis-direction neighbours
+    ** respecting periodic boundary conditions (wrap around) */
+    int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
+    int y_n = (ii + 1) % params.ny; // Could move up
+    
     for (int jj = 0; jj < params.nx; jj++)
     {
       int index = ii * params.nx + jj;
