@@ -301,6 +301,8 @@ int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obsta
       if (obstacles[index])
       {  
         t_speed current_cell = cells[index];
+        t_speed tmp_current_cell = tmp_cells[index];
+
 
         /* called after propagate, so taking values from scratch space
         ** mirroring, and writing into main grid */
