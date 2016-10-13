@@ -454,17 +454,18 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       tmp_cells[y_n * params.nx + x_w].speeds[6]  = cells[index].speeds[6]; /* north-west */
       tmp_cells[y_s * params.nx + x_w].speeds[7]  = cells[index].speeds[7]; /* south-west */
       tmp_cells[y_s * params.nx + x_e].speeds[8]  = cells[index].speeds[8]; /* south-east */
-      printf("value: %d==\n", ii * params.nx + jj);
-      printf("value: %d==\n", ii * params.nx + x_e);
-      printf("value: %d==\n", y_n * params.nx + jj);
-      printf("value: %d==\n", ii * params.nx + x_w);
-      printf("value: %d==\n", y_s * params.nx + jj);
-      printf("value: %d==\n", y_n * params.nx + x_e);
-      printf("value: %d==\n", y_n * params.nx + x_w);
-      printf("value: %d==\n", y_s * params.nx + x_w);
-      printf("value: %d==\n", y_s * params.nx + x_e);
 
-      my_delay();
+      // printf("value: %d==\n", ii * params.nx + jj);
+      // printf("value: %d==\n", ii * params.nx + x_e);
+      // printf("value: %d==\n", y_n * params.nx + jj);
+      // printf("value: %d==\n", ii * params.nx + x_w);
+      // printf("value: %d==\n", y_s * params.nx + jj);
+      // printf("value: %d==\n", y_n * params.nx + x_e);
+      // printf("value: %d==\n", y_n * params.nx + x_w);
+      // printf("value: %d==\n", y_s * params.nx + x_w);
+      // printf("value: %d==\n", y_s * params.nx + x_e);
+
+      // my_delay();
 
     }
   }
