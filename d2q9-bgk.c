@@ -750,12 +750,12 @@ int initialise(const char* paramfile, const char* obstaclefile,
   double w0 = params->density * 4.0 / 9.0;
   double w1 = params->density      / 9.0;
   double w2 = params->density      / 36.0;
-  int index = ii * params->nx + jj;
 // ny, nx = 128
   for (int ii = 0; ii < params->ny; ii++)
   {
     for (int jj = 0; jj < params->nx; jj++)
     {   
+      int index = ii * params->nx + jj;
       /* centre */
       (*cells_ptr)[index].speeds[0] = w0;
       /* axis directions */
@@ -770,7 +770,7 @@ int initialise(const char* paramfile, const char* obstaclefile,
       (*cells_ptr)[index].speeds[8] = w2;
 
       /* first set all cells in obstacle array to zero */
-      (*obstacles_ptr)[ii * params->nx + jj] = 0;
+      (*obstacles_ptr)[index] = 0;
 
     }
   }
