@@ -259,7 +259,7 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       /* propagate densities to neighbouring cells, following
       ** appropriate directions of travel and writing into
       ** scratch space grid */
-      t_speed* current_cell = cells[index];
+      t_speed current_cell = cells[index];
 
       tmp_cells[ii * params.nx + jj].speeds[0]    = current_cell.speeds[0]; /* central cell, no movement */
       tmp_cells[ii * params.nx + x_e].speeds[1]   = current_cell.speeds[1]; /* east */
