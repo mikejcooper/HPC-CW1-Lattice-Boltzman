@@ -327,8 +327,8 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
   const double w2 = 1.0 / 36.0; /* weighting factor */
 
   /* compute weighting factors */
-  double w1 = params.density * params.accel / 9.0;
-  double w2 = params.density * params.accel / 36.0;
+  double w1_af = params.density * params.accel / 9.0;
+  double w2_af = params.density * params.accel / 36.0;
 
   /* loop over the cells in the grid
   ** NB the collision step is called after
@@ -433,18 +433,18 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
         /* if the cell is not occupied and
         ** we don't send a negative density */
         if (!obstacles[index]
-            && (cells[index].speeds[3] - w1) > 0.0
-            && (cells[index].speeds[6] - w2) > 0.0
-            && (cells[index].speeds[7] - w2) > 0.0)
+            && (cells[index].speeds[3] - w1_af) > 0.0
+            && (cells[index].speeds[6] - w2_af) > 0.0
+            && (cells[index].speeds[7] - w2_af) > 0.0)
         {
           /* increase 'east-side' densities */
-          cells[index].speeds[1] += w1;
-          cells[index].speeds[5] += w2;
-          cells[index].speeds[8] += w2;
+          cells[index].speeds[1] += w1_af;
+          cells[index].speeds[5] += w2_af;
+          cells[index].speeds[8] += w2_af;
           /* decrease 'west-side' densities */
-          cells[index].speeds[3] -= w1;
-          cells[index].speeds[6] -= w2;
-          cells[index].speeds[7] -= w2;
+          cells[index].speeds[3] -= w1_af;
+          cells[index].speeds[6] -= w2_af;
+          cells[index].speeds[7] -= w2_af;
         }
       }
     }
