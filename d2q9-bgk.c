@@ -335,11 +335,11 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 
-  int STEP = 5;
-  for(int ii = 0; ii<N; i+=STEP){
+  // int STEP = 5;
+  // for(int ii = 0; ii<N; i+=STEP){
 
-  }
-  for(i=j; i<min(N, j+B); ++i){
+  // }
+  // for(i=j; i<min(N, j+B); ++i){
   for (int ii = 0; ii < params.ny; ii++)
   {
     for (int jj = 0; jj < params.nx; jj++)
