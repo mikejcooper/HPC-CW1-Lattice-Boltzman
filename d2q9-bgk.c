@@ -359,13 +359,12 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
         cells[index].speeds[6] = tmp_cells[index].speeds[8];
         cells[index].speeds[7] = tmp_cells[index].speeds[5];
         cells[index].speeds[8] = tmp_cells[index].speeds[6];
-      }
-
-// --------END-----------------------------------------------------
-
-      /* don't consider occupied cells */
-      if (!obstacles[index])
+// --------END-------------------------------------------------------
+      } 
+      else
       {
+        /* don't consider occupied cells */
+
         /* compute local density total */
         double local_density = 0.0;
 
@@ -393,14 +392,14 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
 
         /* velocity squared */
         double u_sq = u_x * u_x + u_y * u_y;
-        double e1 = 2.0 * c_sq * c_sq;
-        double e2 = u_sq / (2.0 * c_sq);
+        double e1 =  c_sq * c_sq + c_sq * c_sq;
+        double e2 = u_sq / (c_sq + c_sq);
 
        
 
         cells[index].speeds[0] = tmp_cells[index].speeds[0]
                                                   + params.omega
-                                                  * (w0 * local_density * (1.0 - u_sq / (2.0 * c_sq))
+                                                  * (w0 * local_density * (1.0 - u_sq / (c_sq + c_sq))
                                                     - tmp_cells[index].speeds[0]);
         cells[index].speeds[1] = tmp_cells[index].speeds[1]
                                                   + params.omega
