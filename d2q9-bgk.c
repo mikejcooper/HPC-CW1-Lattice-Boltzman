@@ -240,6 +240,9 @@ int accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 
 int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
+
+    int STEP = 255;
+
   for (int i=0;i<params.ny;i+=STEP)
   {
     for (int j=0;j<params.nx;j+=STEP)
@@ -354,6 +357,9 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 
+
+  int STEP = 255;
+
   for (int i=0;i<params.ny;i+=STEP)
   {
     for (int j=0;j<params.nx;j+=STEP)
@@ -465,6 +471,9 @@ double av_velocity(const t_param params, t_speed* cells, int* obstacles)
 
   /* initialise */
   tot_u = 0.0;
+
+
+  int STEP = 255;
 
   for (int i=0;i<params.ny;i+=STEP)
   {
