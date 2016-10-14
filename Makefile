@@ -1,10 +1,11 @@
 # Makefile
 
+# EXE=temp
 EXE=d2q9-bgk
 
-CC=icc
-CFLAGS= -std=c99 -xSSE4.2 
-# CFLAGS= -std=c99 -O3 -flto
+CC=gcc
+# CFLAGS= -std=c99 -xSSE4.2 
+CFLAGS= -std=c99 -O3 
 # CFLAGS= -std=c99 -Wall -O3 -DDEBUG -g
 LIBS = -lm
 
