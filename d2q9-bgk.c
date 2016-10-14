@@ -216,6 +216,7 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
     int index = ii * params.nx + jj;
     /* if the cell is not occupied and
     ** we don't send a negative density */
+    
     if (!obstacles[index]
         && (cells[index].speeds[3] - w1) > 0.0
         && (cells[index].speeds[6] - w2) > 0.0
@@ -247,6 +248,31 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
     for (int jj = 0; jj < params.nx; jj++)
     {
       int index = ii * params.nx + jj;
+
+// ---------accelerate_flow----------------------------------------------------
+    if (ii == params.ny - 2)
+    {
+      if (!obstacles[index]
+              && (cells[index].speeds[3] - w1) > 0.0
+              && (cells[index].speeds[6] - w2) > 0.0
+              && (cells[index].speeds[7] - w2) > 0.0)
+          {
+            /* increase 'east-side' densities */
+            cells[index].speeds[1] += w1;
+            cells[index].speeds[5] += w2;
+            cells[index].speeds[8] += w2;
+            /* decrease 'west-side' densities */
+            cells[index].speeds[3] -= w1;
+            cells[index].speeds[6] -= w2;
+            cells[index].speeds[7] -= w2;
+          }
+    }
+
+// -------------------------------------------------------------------------
+
+
+
+
 
       /* determine indices of axis-direction neighbours
       ** respecting periodic boundary conditions (wrap around) */
