@@ -379,18 +379,18 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
         double u_sq = u_x * u_x + u_y * u_y;
 
         /* directional velocity components */
-        double u[NSPEEDS];
-        u[1] =   u_x;        /* east */
-        u[2] =         u_y;  /* north */
-        u[3] = - u_x;        /* west */
-        u[4] =       - u_y;  /* south */
-        u[5] =   (u_x + u_y);  /* north-east */
-        u[6] = (- u_x + u_y);  /* north-west */
-        u[7] = (- u_x - u_y);  /* south-west */
-        u[8] =   (u_x - u_y);  /* south-east */
+        // double u[NSPEEDS];
+        // u[1] =   u_x;        /* east */
+        // u[2] =         u_y;  /* north */
+        // u[3] = - u_x;        /* west */
+        // u[4] =       - u_y;  /* south */
+        // u[5] =   (u_x + u_y);  /* north-east */
+        // u[6] = (- u_x + u_y);  /* north-west */
+        // u[7] = (- u_x - u_y);  /* south-west */
+        // u[8] =   (u_x - u_y);  /* south-east */
 
         /* equilibrium densities */
-        double d_equ[NSPEEDS];
+        // double d_equ[NSPEEDS];
         double e1 = 2.0 * c_sq * c_sq;
         double e2 = u_sq / (2.0 * c_sq);
 
@@ -456,7 +456,7 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
                                                   + params.omega
                                                   * (w2 * local_density * (1.0 + (u_x + u_y) / c_sq + ((u_x + u_y) * (u_x + u_y)) / e1 - e2)
                                                     - tmp_cells[index].speeds[5]);
-        cells[index].speeds[6] = tmp_cells[index].speeds[6]]
+        cells[index].speeds[6] = tmp_cells[index].speeds[6]
                                                   + params.omega
                                                   * (w2 * local_density * (1.0 + (- u_x + u_y) / c_sq + ((- u_x + u_y) * (- u_x + u_y)) / e1 - e2)
                                                     - tmp_cells[index].speeds[6]);
