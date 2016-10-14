@@ -59,6 +59,7 @@
 #define NSPEEDS         9
 #define FINALSTATEFILE  "final_state.dat"
 #define AVVELSFILE      "av_vels.dat"
+#define min(a, b) (((a) < (b)) ? (a) : (b)) 
 
 /* struct to hold the parameter values */
 typedef struct
@@ -288,33 +289,41 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   /* loop over the cells in the grid */
-  for (int ii = 0; ii < params.ny; ii++)
+  int STEP = 255;
+  
+  for (int i=0;i<params.ny;i+=STEP)
   {
-    for (int jj = 0; jj < params.nx; jj++)
+    for (int j=0;j<params.nx;j+=STEP)
     {
-      int index = ii * params.nx + jj;
+      for (int ii = i; ii < min(i+STEP,params.ny); ii++)
+      {
+        for (int jj = j; jj <  min(i+STEP,params.nx); jj++)
+        {
+          int index = ii * params.nx + jj;
 
-      /* if the cell contains an obstacle */
-      if (obstacles[index])
-      {  
-        /* called after propagate, so taking values from scratch space
-        ** mirroring, and writing into main grid */
+          /* if the cell contains an obstacle */
+          if (obstacles[index])
+          {  
+            /* called after propagate, so taking values from scratch space
+            ** mirroring, and writing into main grid */
 
-        t_speed current_cell = cells[index];
+            // t_speed current_cell = cells[index];
 
-        cells[index].speeds[1] = tmp_cells[index].speeds[3];
-        cells[index].speeds[2] = tmp_cells[index].speeds[4];
-        cells[index].speeds[3] = tmp_cells[index].speeds[1];
-        cells[index].speeds[4] = tmp_cells[index].speeds[2];
-        cells[index].speeds[5] = tmp_cells[index].speeds[7];
-        cells[index].speeds[6] = tmp_cells[index].speeds[8];
-        cells[index].speeds[7] = tmp_cells[index].speeds[5];
-        cells[index].speeds[8] = tmp_cells[index].speeds[6];
+            cells[index].speeds[1] = tmp_cells[index].speeds[3];
+            cells[index].speeds[2] = tmp_cells[index].speeds[4];
+            cells[index].speeds[3] = tmp_cells[index].speeds[1];
+            cells[index].speeds[4] = tmp_cells[index].speeds[2];
+            cells[index].speeds[5] = tmp_cells[index].speeds[7];
+            cells[index].speeds[6] = tmp_cells[index].speeds[8];
+            cells[index].speeds[7] = tmp_cells[index].speeds[5];
+            cells[index].speeds[8] = tmp_cells[index].speeds[6];
 
-        // printf("value: %f==\n", current_cell.speeds[1]);
-        // printf("value true: %f==\n", cells[index].speeds[1]);
+            // printf("value: %f==\n", current_cell.speeds[1]);
+            // printf("value true: %f==\n", cells[index].speeds[1]);
 
-        // my_delay();
+            // my_delay();
+          }
+        }
       }
     }
   }
