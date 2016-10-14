@@ -343,7 +343,15 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
   {
     for (int jj = 0; jj < params.nx; jj++)
     {
+
       int index = ii * params.nx + jj;
+
+      if(index%400 == 0){
+        __builtin_prefetch(&tmp_cells[index+400]);
+      }
+
+
+
 
 // --------reboound()-------------------------------------------------
 
