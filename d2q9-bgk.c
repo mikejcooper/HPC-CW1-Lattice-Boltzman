@@ -300,7 +300,6 @@ int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obsta
         /* called after propagate, so taking values from scratch space
         ** mirroring, and writing into main grid */
 
-        t_speed current_cell = cells[index];
 
         cells[index].speeds[1] = tmp_cells[index].speeds[3];
         cells[index].speeds[2] = tmp_cells[index].speeds[4];
@@ -346,14 +345,12 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
     {
       int index = ii * params.nx + jj;
 
-      /* don't consider occupied cells */
-      if (!obstacles[index])
-      {
+// --------reboound()-------------------------------------------------
 
-        // rebound()
+      if (obstacles[index]){
+
         /* called after propagate, so taking values from scratch space
-        ** mirroring, and writing into main grid */
-        
+        ** mirroring, and writing into main grid */        
         cells[index].speeds[1] = tmp_cells[index].speeds[3];
         cells[index].speeds[2] = tmp_cells[index].speeds[4];
         cells[index].speeds[3] = tmp_cells[index].speeds[1];
@@ -362,9 +359,13 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
         cells[index].speeds[6] = tmp_cells[index].speeds[8];
         cells[index].speeds[7] = tmp_cells[index].speeds[5];
         cells[index].speeds[8] = tmp_cells[index].speeds[6];
+      }
 
+// --------END-----------------------------------------------------
 
-
+      /* don't consider occupied cells */
+      if (!obstacles[index])
+      {
         /* compute local density total */
         double local_density = 0.0;
 
