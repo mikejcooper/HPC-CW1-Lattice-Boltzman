@@ -372,7 +372,7 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
         {
           local_density += tmp_cells[index].speeds[kk];
         }
-        double temp = tmp_cells[index];
+        t_speed temp = tmp_cells[index];
 
        /* compute x velocity component */
         double u_x = (temp.speeds[1]
