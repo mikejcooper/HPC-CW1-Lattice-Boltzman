@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
 
 void timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
-  // accelerate_flow(params, cells, obstacles);
+  accelerate_flow(params, cells, obstacles);
   propagate(params, cells, tmp_cells);
   // rebound(params, cells, tmp_cells, obstacles);
   collision(params, cells, tmp_cells, obstacles);
@@ -250,23 +250,23 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       int index = ii * params.nx + jj;
 
 // ---------accelerate_flow----------------------------------------------------
-    if (ii == params.ny - 2)
-    {
-      if (!obstacles[index]
-              && (cells[index].speeds[3] - w1) > 0.0
-              && (cells[index].speeds[6] - w2) > 0.0
-              && (cells[index].speeds[7] - w2) > 0.0)
-          {
-            /* increase 'east-side' densities */
-            cells[index].speeds[1] += w1;
-            cells[index].speeds[5] += w2;
-            cells[index].speeds[8] += w2;
-            /* decrease 'west-side' densities */
-            cells[index].speeds[3] -= w1;
-            cells[index].speeds[6] -= w2;
-            cells[index].speeds[7] -= w2;
-          }
-    }
+    // if (ii == params.ny - 2)
+    // {
+    //   if (!obstacles[index]
+    //           && (cells[index].speeds[3] - w1) > 0.0
+    //           && (cells[index].speeds[6] - w2) > 0.0
+    //           && (cells[index].speeds[7] - w2) > 0.0)
+    //       {
+    //         /* increase 'east-side' densities */
+    //         cells[index].speeds[1] += w1;
+    //         cells[index].speeds[5] += w2;
+    //         cells[index].speeds[8] += w2;
+    //         /* decrease 'west-side' densities */
+    //         cells[index].speeds[3] -= w1;
+    //         cells[index].speeds[6] -= w2;
+    //         cells[index].speeds[7] -= w2;
+    //       }
+    // }
 
 // -------------------------------------------------------------------------
 
@@ -400,15 +400,15 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
         //   local_density += cells[index].speeds[kk];
         // }
 
-        local_density += cells[index].speeds[0];
-        local_density += cells[index].speeds[1];
-        local_density += cells[index].speeds[2];
-        local_density += cells[index].speeds[3];
-        local_density += cells[index].speeds[4];
-        local_density += cells[index].speeds[5];
-        local_density += cells[index].speeds[6];
-        local_density += cells[index].speeds[7];
-        local_density += cells[index].speeds[8];
+        local_density += tmp_cells[index].speeds[0];
+        local_density += tmp_cells[index].speeds[1];
+        local_density += tmp_cells[index].speeds[2];
+        local_density += tmp_cells[index].speeds[3];
+        local_density += tmp_cells[index].speeds[4];
+        local_density += tmp_cells[index].speeds[5];
+        local_density += tmp_cells[index].speeds[6];
+        local_density += tmp_cells[index].speeds[7];
+        local_density += tmp_cells[index].speeds[8];
 
         /* compute x velocity component */
         double u_x = (tmp_cells[index].speeds[1]
