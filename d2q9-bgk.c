@@ -385,19 +385,29 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
         cells[index].speeds[6] = tmp_cells[index].speeds[8];
         cells[index].speeds[7] = tmp_cells[index].speeds[5];
         cells[index].speeds[8] = tmp_cells[index].speeds[6];
+
 // --------END-------------------------------------------------------
       } 
       else
       {
         /* don't consider occupied cells */
 
-        /* compute local density total */
-        double local_density = 0.0;
+        double local_density = tmp_cells[index].speeds[0];
 
-        for (int kk = 0; kk < NSPEEDS; kk++)
-        {
-          local_density += tmp_cells[index].speeds[kk];
-        }
+        // for (int kk = 0; kk < NSPEEDS; kk++)
+        // {
+        //   local_density += tmp_cells[index].speeds[kk];
+        // }
+
+        local_density += tmp_cells[index].speeds[0];
+        local_density += tmp_cells[index].speeds[1];
+        local_density += tmp_cells[index].speeds[2];
+        local_density += tmp_cells[index].speeds[3];
+        local_density += tmp_cells[index].speeds[4];
+        local_density += tmp_cells[index].speeds[5];
+        local_density += tmp_cells[index].speeds[6];
+        local_density += tmp_cells[index].speeds[7];
+        local_density += tmp_cells[index].speeds[8];
 
         /* compute x velocity component */
         double u_x = (tmp_cells[index].speeds[1]
