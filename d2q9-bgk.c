@@ -391,48 +391,48 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
                          + tmp_cells[index].speeds[8]))
                      / local_density;
 
-        // * velocity squared */
-        // double c_sq = (u_x * u_x + u_y * u_y);
-        // double e1 =  (c_sq * c_sq + c_sq * c_sq);
-        // double e2 = ((u_x * u_x + u_y * u_y) / (c_sq + c_sq));
+        /* velocity squared */
+        double u_sq = u_x * u_x + u_y * u_y;
+        double e1 =  c_sq * c_sq + c_sq * c_sq;
+        double e2 = u_sq / (c_sq + c_sq);
 
        
 
         cells[index].speeds[0] = tmp_cells[index].speeds[0]
                                                   + params.omega
-                                                  * (w0 * local_density * (1.0 - (u_x * u_x + u_y * u_y) / (c_sq + c_sq))
+                                                  * (w0 * local_density * (1.0 - u_sq / (c_sq + c_sq))
                                                     - tmp_cells[index].speeds[0]);
         cells[index].speeds[1] = tmp_cells[index].speeds[1]
                                                   + params.omega
-                                                  * (w1 * local_density * (1.0 + u_x / c_sq + (u_x * u_x) / (c_sq * c_sq + c_sq * c_sq) - ((u_x * u_x + u_y * u_y) / (c_sq + c_sq)))
+                                                  * (w1 * local_density * (1.0 + u_x / c_sq + (u_x * u_x) / e1 - e2)
                                                     - tmp_cells[index].speeds[1]);
         cells[index].speeds[2] = tmp_cells[index].speeds[2]
                                                   + params.omega
-                                                  * (w1 * local_density * (1.0 + u_y / c_sq + (u_y * u_y) / (c_sq * c_sq + c_sq * c_sq) - ((u_x * u_x + u_y * u_y) / (c_sq + c_sq)))
+                                                  * (w1 * local_density * (1.0 + u_y / c_sq + (u_y * u_y) / e1 - e2)
                                                     - tmp_cells[index].speeds[2]);
         cells[index].speeds[3] = tmp_cells[index].speeds[3]
                                                   + params.omega
-                                                  * (w1 * local_density * (1.0 + - u_x / c_sq + (- u_x * - u_x) / (c_sq * c_sq + c_sq * c_sq) - ((u_x * u_x + u_y * u_y) / (c_sq + c_sq)))
+                                                  * (w1 * local_density * (1.0 + - u_x / c_sq + (- u_x * - u_x) / e1 - e2)
                                                     - tmp_cells[index].speeds[3]);
         cells[index].speeds[4] = tmp_cells[index].speeds[4]
                                                   + params.omega
-                                                  * (w1 * local_density * (1.0 + - u_y / c_sq + (- u_y * - u_y) / (c_sq * c_sq + c_sq * c_sq) - ((u_x * u_x + u_y * u_y) / (c_sq + c_sq)))
+                                                  * (w1 * local_density * (1.0 + - u_y / c_sq + (- u_y * - u_y) / e1 - e2)
                                                     - tmp_cells[index].speeds[4]);
         cells[index].speeds[5] = tmp_cells[index].speeds[5]
                                                   + params.omega
-                                                  * (w2 * local_density * (1.0 + (u_x + u_y) / c_sq + ((u_x + u_y) * (u_x + u_y)) / (c_sq * c_sq + c_sq * c_sq) - ((u_x * u_x + u_y * u_y) / (c_sq + c_sq)))
+                                                  * (w2 * local_density * (1.0 + (u_x + u_y) / c_sq + ((u_x + u_y) * (u_x + u_y)) / e1 - e2)
                                                     - tmp_cells[index].speeds[5]);
         cells[index].speeds[6] = tmp_cells[index].speeds[6]
                                                   + params.omega
-                                                  * (w2 * local_density * (1.0 + (- u_x + u_y) / c_sq + ((- u_x + u_y) * (- u_x + u_y)) / (c_sq * c_sq + c_sq * c_sq) - ((u_x * u_x + u_y * u_y) / (c_sq + c_sq)))
+                                                  * (w2 * local_density * (1.0 + (- u_x + u_y) / c_sq + ((- u_x + u_y) * (- u_x + u_y)) / e1 - e2)
                                                     - tmp_cells[index].speeds[6]);
         cells[index].speeds[7] = tmp_cells[index].speeds[7]
                                                   + params.omega
-                                                  * (w2 * local_density * (1.0 + (- u_x - u_y) / c_sq + ((- u_x - u_y) * (- u_x - u_y)) / (c_sq * c_sq + c_sq * c_sq) - ((u_x * u_x + u_y * u_y) / (c_sq + c_sq)))
+                                                  * (w2 * local_density * (1.0 + (- u_x - u_y) / c_sq + ((- u_x - u_y) * (- u_x - u_y)) / e1 - e2)
                                                     - tmp_cells[index].speeds[7]);
         cells[index].speeds[8] = tmp_cells[index].speeds[8]
                                                   + params.omega
-                                                  * (w2 * local_density * (1.0 + (u_x - u_y) / c_sq + ((u_x - u_y) * (u_x - u_y)) / (c_sq * c_sq + c_sq * c_sq) - ((u_x * u_x + u_y * u_y) / (c_sq + c_sq)))
+                                                  * (w2 * local_density * (1.0 + (u_x - u_y) / c_sq + ((u_x - u_y) * (u_x - u_y)) / e1 - e2)
                                                     - tmp_cells[index].speeds[8]);
 
         
@@ -462,10 +462,22 @@ double av_velocity(const t_param params, t_speed* cells, int* obstacles)
         /* local density total */
         double local_density = 0.0;
 
-        for (int kk = 0; kk < NSPEEDS; kk++)
-        {
-          local_density += cells[index].speeds[kk];
-        }
+        // for (int kk = 0; kk < NSPEEDS; kk++)
+        // {
+        //   local_density += cells[index].speeds[kk];
+        // }
+
+        local_density += cells[index].speeds[0];
+        local_density += cells[index].speeds[1];
+        local_density += cells[index].speeds[2];
+        local_density += cells[index].speeds[3];
+        local_density += cells[index].speeds[4];
+        local_density += cells[index].speeds[5];
+        local_density += cells[index].speeds[6];
+        local_density += cells[index].speeds[7];
+        local_density += cells[index].speeds[8];
+
+
 
         /* x-component of velocity */
         double u_x = (cells[index].speeds[1]
