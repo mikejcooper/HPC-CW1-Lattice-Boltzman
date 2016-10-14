@@ -216,7 +216,6 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
     int index = ii * params.nx + jj;
     /* if the cell is not occupied and
     ** we don't send a negative density */
-    
     if (!obstacles[index]
         && (cells[index].speeds[3] - w1) > 0.0
         && (cells[index].speeds[6] - w2) > 0.0
@@ -249,6 +248,8 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
     {
       int index = ii * params.nx + jj;
 
+
+
 // ---------accelerate_flow----------------------------------------------------
     // if (ii == params.ny - 2)
     // {
@@ -269,8 +270,6 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
     // }
 
 // -------------------------------------------------------------------------
-
-
 
 
 
@@ -393,22 +392,12 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
         /* don't consider occupied cells */
 
         /* compute local density total */
-        double local_density = cells[index].speeds[0];
+        double local_density = 0.0;
 
-        // for (int kk = 0; kk < NSPEEDS; kk++)
-        // {
-        //   local_density += cells[index].speeds[kk];
-        // }
-
-        local_density += tmp_cells[index].speeds[0];
-        local_density += tmp_cells[index].speeds[1];
-        local_density += tmp_cells[index].speeds[2];
-        local_density += tmp_cells[index].speeds[3];
-        local_density += tmp_cells[index].speeds[4];
-        local_density += tmp_cells[index].speeds[5];
-        local_density += tmp_cells[index].speeds[6];
-        local_density += tmp_cells[index].speeds[7];
-        local_density += tmp_cells[index].speeds[8];
+        for (int kk = 0; kk < NSPEEDS; kk++)
+        {
+          local_density += tmp_cells[index].speeds[kk];
+        }
 
         /* compute x velocity component */
         double u_x = (tmp_cells[index].speeds[1]
