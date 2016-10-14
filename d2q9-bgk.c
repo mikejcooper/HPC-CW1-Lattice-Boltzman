@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
 
 void timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
-  accelerate_flow(params, cells, obstacles);
+  // accelerate_flow(params, cells, obstacles);
   propagate(params, cells, tmp_cells);
   // rebound(params, cells, tmp_cells, obstacles);
   collision(params, cells, tmp_cells, obstacles);
