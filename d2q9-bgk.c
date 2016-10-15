@@ -111,10 +111,10 @@ int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr
 double total_density(const t_param params, t_speed* cells);
 
 /* compute average velocity */
-double av_velocity(const t_param params, t_speed* cells, int* obstacles);
+void av_velocity(const t_param params, t_speed* cells, int* obstacles, double* avals, int tt);
 
 /* calculate Reynolds number */
-double calc_reynolds(const t_param params, t_speed* cells, int* obstacles);
+double calc_reynolds(const t_param params, t_speed* cells, int* obstacles, double* av_vels, int tt);
 
 /* utility functions */
 void die(const char* message, const int line, const char* file);
@@ -160,14 +160,8 @@ int main(int argc, char* argv[])
   // maxIters = 4000
   for (int tt = 0; tt < params.maxIters; tt++)
   {
-        // printf("accelerate_flow jj = %d, ii = %d.  ii * params.nx + jj = %d  \n", jj, ii, ii * params.nx + jj);
-
-    // timestep(params, cells, tmp_cells, obstacles);
-
-  accelerate_flow(params, cells, obstacles);
-  propagate(params, cells, tmp_cells);
-  collision(params, cells, tmp_cells, obstacles);
-    av_vels[tt] = av_velocity(params, cells, obstacles);
+    timestep(params, cells, tmp_cells, obstacles);
+    av_velocity(params, cells, obstacles, av_vels, tt);
 #ifdef DEBUG
     printf("==timestep: %d==\n", tt);
     printf("av velocity: %.12E\n", av_vels[tt]);
@@ -185,7 +179,7 @@ int main(int argc, char* argv[])
 
   /* write final values and free memory */
   printf("==done==\n");
-  printf("Reynolds number:\t\t%.12E\n", calc_reynolds(params, cells, obstacles));
+  // printf("Reynolds number:\t\t%.12E\n", calc_reynolds(params, cells, obstacles, av_vels, tt));
   printf("Elapsed time:\t\t\t%.6lf (s)\n", toc - tic);
   printf("Elapsed user CPU time:\t\t%.6lf (s)\n", usrtim);
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
@@ -365,6 +359,7 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
         cells[index].speeds[7] = tmp_cells[index].speeds[5];
         cells[index].speeds[8] = tmp_cells[index].speeds[6];
       } 
+// -------END--------------------------------------------------------------
       else 
       {
 
@@ -444,7 +439,7 @@ int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
   return EXIT_SUCCESS;
 }
 
-double av_velocity(const t_param params, t_speed* cells, int* obstacles)
+void av_velocity(const t_param params, t_speed* cells, int* obstacles, double* av_vels, int tt)
 {
   int    tot_cells = 0;  /* no. of cells used in calculation */
   double tot_u;          /* accumulated magnitudes of velocity for each cell */
@@ -492,7 +487,7 @@ double av_velocity(const t_param params, t_speed* cells, int* obstacles)
     }
   }
 
-  return tot_u / (double)tot_cells;
+  av_vels[tt] = tot_u / (double)tot_cells;
 }
 
 int initialise(const char* paramfile, const char* obstaclefile,
@@ -677,12 +672,12 @@ int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr
 }
 
 
-double calc_reynolds(const t_param params, t_speed* cells, int* obstacles)
-{
-  const double viscosity = 1.0 / 6.0 * (2.0 / params.omega - 1.0);
+// double calc_reynolds(const t_param params, t_speed* cells, int* obstacles, double* av_vels)
+// {
+//   const double viscosity = 1.0 / 6.0 * (2.0 / params.omega - 1.0);
 
-  return av_velocity(params, cells, obstacles) * params.reynolds_dim / viscosity;
-}
+//   return av_velocity(params, cells, obstacles, av_vels) * params.reynolds_dim / viscosity;
+// }
 
 double total_density(const t_param params, t_speed* cells)
 {
