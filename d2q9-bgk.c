@@ -96,7 +96,7 @@ int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obst
 int accelerate_flow(const t_param params, t_speed* cells, int* obstacles);
 int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
 int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
-double collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int write_values(const t_param params, t_speed* cells, int* obstacles, double* av_vels);
 void my_delay();
 
@@ -162,8 +162,12 @@ int main(int argc, char* argv[])
   {
         // printf("accelerate_flow jj = %d, ii = %d.  ii * params.nx + jj = %d  \n", jj, ii, ii * params.nx + jj);
 
-    timestep(params, cells, tmp_cells, obstacles);
-    av_vels[tt] = collision(params, cells, tmp_cells, obstacles);;
+    // timestep(params, cells, tmp_cells, obstacles);
+
+  accelerate_flow(params, cells, obstacles);
+  propagate(params, cells, tmp_cells);
+  collision(params, cells, tmp_cells, obstacles);
+    av_vels[tt] = av_velocity(params, cells, obstacles);
 #ifdef DEBUG
     printf("==timestep: %d==\n", tt);
     printf("av velocity: %.12E\n", av_vels[tt]);
@@ -196,7 +200,7 @@ int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obst
   accelerate_flow(params, cells, obstacles);
   propagate(params, cells, tmp_cells);
   // rebound(params, cells, tmp_cells, obstacles);
-  // collision(params, cells, tmp_cells, obstacles);
+  collision(params, cells, tmp_cells, obstacles);
   return EXIT_SUCCESS;
 }
 
@@ -324,15 +328,12 @@ int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obsta
 
 
 
-double collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
   const double c_sq = 1.0 / 3.0; /* square of speed of sound */
   const double w0 = 4.0 / 9.0;   /* weighting factor */
   const double w1 = 1.0 / 9.0;  /* weighting factor */
   const double w2 = 1.0 / 36.0; /* weighting factor */
-
-  int    tot_cells = 0;  /* no. of cells used in calculation */
-  double tot_u = 0.0;    /* accumulated magnitudes of velocity for each cell */
 
   /* compute weighting factors */
   double w1_af = params.density * params.accel / 9.0;
@@ -436,49 +437,12 @@ double collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* 
                                                   + params.omega
                                                   * (w2 * local_density * (1.0 + (u_x - u_y) / c_sq + ((u_x - u_y) * (u_x - u_y)) / e1 - e2)
                                                     - tmp_cells[index].speeds[8]);
-
-// -------------------------------------------------------------
-        /* local density total */
-        local_density = 0.0;
-
-        for (int kk = 0; kk < NSPEEDS; kk++)
-        {
-          local_density += cells[index].speeds[kk];
-        }
-
-        /* x-component of velocity */
-        u_x = (cells[index].speeds[1]
-                      + cells[index].speeds[5]
-                      + cells[index].speeds[8]
-                      - (cells[index].speeds[3]
-                         + cells[index].speeds[6]
-                         + cells[index].speeds[7]))
-                     / local_density;
-        /* compute y velocity component */
-        u_y = (cells[index].speeds[2]
-                      + cells[index].speeds[5]
-                      + cells[index].speeds[6]
-                      - (cells[index].speeds[4]
-                         + cells[index].speeds[7]
-                         + cells[index].speeds[8]))
-                     / local_density;
-        /* accumulate the norm of x- and y- velocity components */
-        tot_u += sqrt((u_x * u_x) + (u_y * u_y));
-        /* increase counter of inspected cells */
-        ++tot_cells;
-
-
-
-
       }
     }
   }
 
-return tot_u / (double)tot_cells;
-
+  return EXIT_SUCCESS;
 }
-
-
 
 double av_velocity(const t_param params, t_speed* cells, int* obstacles)
 {
