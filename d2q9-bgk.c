@@ -55,6 +55,7 @@
 #include<time.h>
 #include<sys/time.h>
 #include<sys/resource.h>
+#include<papi.h>
 
 #define NSPEEDS         9
 #define FINALSTATEFILE  "final_state.dat"
@@ -139,6 +140,17 @@ int main(int argc, char* argv[])
   double usrtim;                /* floating point number to record elapsed user CPU time */
   double systim;                /* floating point number to record elapsed system CPU time */
 
+
+  long long counters[3];
+  int PAPI_events[] = {
+  PAPI_TOT_CYC,
+  PAPI_L2_DCM,
+  PAPI_L2_DCA };
+
+  PAPI_library_init( PAPI_VER_CURRENT );
+  i = PAPI_start_counters( PAPI_events, 3 );
+
+
   /* parse the command line */
   if (argc != 3)
   {
@@ -171,6 +183,8 @@ int main(int argc, char* argv[])
 #endif
   }
 
+
+
   gettimeofday(&timstr, NULL);
   toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   getrusage(RUSAGE_SELF, &ru);
@@ -187,6 +201,11 @@ int main(int argc, char* argv[])
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
   write_values(params, cells, obstacles, av_vels);
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
+
+  printf("%lld L2 cache misses (%.3lf%% misses) in %lld cycles\n",
+    counters[1],
+    (double)counters[1] / (double)counters[2],
+    counters[0] );
 
   return EXIT_SUCCESS;
 }
@@ -237,7 +256,6 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
     for (int jj = 0; jj < params.nx; jj++)
     {
       int index = ii * params.nx + jj;
-
       /* determine indices of axis-direction neighbours
       ** respecting periodic boundary conditions (wrap around) */
       int x_e = (jj + 1) % params.nx;
@@ -254,18 +272,6 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       tmp_cells[y_n * params.nx + x_w].speeds[6]  = cells[index].speeds[6]; /* north-west */
       tmp_cells[y_s * params.nx + x_w].speeds[7]  = cells[index].speeds[7]; /* south-west */
       tmp_cells[y_s * params.nx + x_e].speeds[8]  = cells[index].speeds[8]; /* south-east */
-
-      // printf("value: %d==\n", ii * params.nx + jj);
-      // printf("value: %d==\n", ii * params.nx + x_e);
-      // printf("value: %d==\n", y_n * params.nx + jj);
-      // printf("value: %d==\n", ii * params.nx + x_w);
-      // printf("value: %d==\n", y_s * params.nx + jj);
-      // printf("value: %d==\n", y_n * params.nx + x_e);
-      // printf("value: %d==\n", y_n * params.nx + x_w);
-      // printf("value: %d==\n", y_s * params.nx + x_w);
-      // printf("value: %d==\n", y_s * params.nx + x_e);
-
-      // my_delay();
     }
   }
 }
@@ -310,6 +316,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
         cells[index].speeds[7] = tmp_cells[index].speeds[5];
         cells[index].speeds[8] = tmp_cells[index].speeds[6];
       } 
+// ----------------END--------------------------------------------
       else 
       {
 
@@ -383,7 +390,8 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
                                                   * (w2 * local_density * (1.0 + (u_x - u_y) / c_sq + ((u_x - u_y) * (u_x - u_y)) / e1 - e2)
                                                     - tmp_cells[index].speeds[8]);
 
-// -------------------------------------------------------------
+// --------------av_velocity-----------------------------------------------
+
         /* local density total */
         local_density = 0.0;
 
@@ -422,6 +430,9 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
 
   av_vels[tt] = tot_u / (double)tot_cells;
 }
+
+
+
 void av_velocity(const t_param params, t_speed* cells, int* obstacles, double* av_vels, int tt)
 {
   int    tot_cells = 0;  /* no. of cells used in calculation */
