@@ -194,13 +194,8 @@ int main(int argc, char* argv[])
 void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 {
   /* compute weighting factors */
-  // double w1 = 1526726656
-  // double w2 = 18831104
-
   double w1 = params.density * params.accel / 9.0;
   double w2 = params.density * params.accel / 36.0;
-  // printf("w1: %f\n",w1 );
-  // printf("w2: %\n",w2 );
 
 
   /* modify the 2nd row of the grid */
@@ -265,11 +260,10 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 
 void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_vels, int tt)
 {
-  // increase for precision
-  const double c_sq = 0.333333333333; /* square of speed of sound */
-  const double w0 =   0.444444444444;   /* weighting factor */
-  const double w1 =   0.111111111111;  /* weighting factor */
-  const double w2 =   0.027777777777; /* weighting factor */
+  const double c_sq = 1.0 / 3.0; /* square of speed of sound */
+  const double w0 = 4.0 / 9.0;   /* weighting factor */
+  const double w1 = 1.0 / 9.0;  /* weighting factor */
+  const double w2 = 1.0 / 36.0; /* weighting factor */
 
   int    tot_cells = 0;  /* no. of cells used in calculation */
   double tot_u = 0.0;    /* accumulated magnitudes of velocity for each cell */
