@@ -370,22 +370,6 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
           local_density += cells[index].speeds[kk];
         }
 
-        /* x-component of velocity */
-        u_x = (cells[index].speeds[1]
-                      + cells[index].speeds[5]
-                      + cells[index].speeds[8]
-                      - (cells[index].speeds[3]
-                         + cells[index].speeds[6]
-                         + cells[index].speeds[7]))
-                     / local_density;
-        /* compute y velocity component */
-        u_y = (cells[index].speeds[2]
-                      + cells[index].speeds[5]
-                      + cells[index].speeds[6]
-                      - (cells[index].speeds[4]
-                         + cells[index].speeds[7]
-                         + cells[index].speeds[8]))
-                     / local_density;
         /* accumulate the norm of x- and y- velocity components */
         tot_u += sqrt((u_x * u_x) + (u_y * u_y));
         /* increase counter of inspected cells */
