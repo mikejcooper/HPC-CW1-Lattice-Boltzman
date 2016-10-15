@@ -94,7 +94,7 @@ int initialise(const char* paramfile, const char* obstaclefile,
 */
 int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int accelerate_flow(const t_param params, t_speed* cells, int* obstacles);
-int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
+int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
 int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 int write_values(const t_param params, t_speed* cells, int* obstacles, double* av_vels);
@@ -193,8 +193,8 @@ int main(int argc, char* argv[])
 
 int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
 {
-  // accelerate_flow(params, cells, obstacles);
-  propagate(params, cells, tmp_cells, obstacles);
+  accelerate_flow(params, cells, obstacles);
+  propagate(params, cells, tmp_cells);
   // rebound(params, cells, tmp_cells, obstacles);
   collision(params, cells, tmp_cells, obstacles);
   return EXIT_SUCCESS;
@@ -237,7 +237,7 @@ int accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   return EXIT_SUCCESS;
 }
 
-int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles)
+int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
   /* loop over _all_ cells */
   for (int ii = 0; ii < params.ny; ii++)
@@ -250,34 +250,6 @@ int propagate(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obs
     for (int jj = 0; jj < params.nx; jj++)
     {
       int index = ii * params.nx + jj;
-
-// --------------accelerate_flow---------------------------
-
-      if(ii == params.ny - 2)
-      {
-        /* compute weighting factors */
-        double w1 = params.density * params.accel / 9.0;
-        double w2 = params.density * params.accel / 36.0;
-
-       if (!obstacles[index]
-        && (cells[index].speeds[3] - w1) > 0.0
-        && (cells[index].speeds[6] - w2) > 0.0
-        && (cells[index].speeds[7] - w2) > 0.0)
-        {
-          /* increase 'east-side' densities */
-          cells[index].speeds[1] += w1;
-          cells[index].speeds[5] += w2;
-          cells[index].speeds[8] += w2;
-          /* decrease 'west-side' densities */
-          cells[index].speeds[3] -= w1;
-          cells[index].speeds[6] -= w2;
-          cells[index].speeds[7] -= w2;
-        } 
-      }
-
-// ------------------------------------------------------
-
-
 
       /* determine indices of axis-direction neighbours
       ** respecting periodic boundary conditions (wrap around) */
