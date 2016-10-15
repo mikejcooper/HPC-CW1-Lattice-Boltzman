@@ -317,10 +317,6 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
                          + tmp_cells[index].speeds[7]
                          + tmp_cells[index].speeds[8]))
                      / local_density;
-
-        
-        /* velocity squared */
-        // double (u_x * u_x + u_y * u_y) = u_x * u_x + u_y * u_y;
        
 
         cells[index].speeds[0] = tmp_cells[index].speeds[0]
