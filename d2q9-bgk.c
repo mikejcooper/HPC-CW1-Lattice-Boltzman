@@ -55,7 +55,6 @@
 #include<time.h>
 #include<sys/time.h>
 #include<sys/resource.h>
-#include<papi.h>
 
 #define NSPEEDS         9
 #define FINALSTATEFILE  "final_state.dat"
@@ -140,17 +139,6 @@ int main(int argc, char* argv[])
   double usrtim;                /* floating point number to record elapsed user CPU time */
   double systim;                /* floating point number to record elapsed system CPU time */
 
-
-  long long counters[3];
-  int PAPI_events[] = {
-  PAPI_TOT_CYC,
-  PAPI_L2_DCM,
-  PAPI_L2_DCA };
-
-  PAPI_library_init( PAPI_VER_CURRENT );
-  int i = PAPI_start_counters( PAPI_events, 3 );
-
-
   /* parse the command line */
   if (argc != 3)
   {
@@ -183,8 +171,6 @@ int main(int argc, char* argv[])
 #endif
   }
 
-
-
   gettimeofday(&timstr, NULL);
   toc = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
   getrusage(RUSAGE_SELF, &ru);
@@ -202,19 +188,20 @@ int main(int argc, char* argv[])
   write_values(params, cells, obstacles, av_vels);
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
 
-  printf("%lld L2 cache misses (%.3lf%% misses) in %lld cycles\n",
-    counters[1],
-    (double)counters[1] / (double)counters[2],
-    counters[0] );
-
   return EXIT_SUCCESS;
 }
 
 void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 {
   /* compute weighting factors */
+  // double w1 = 1526726656
+  // double w2 = 18831104
+
   double w1 = params.density * params.accel / 9.0;
   double w2 = params.density * params.accel / 36.0;
+  // printf("w1: %f\n",w1 );
+  // printf("w2: %\n",w2 );
+
 
   /* modify the 2nd row of the grid */
   int ii = params.ny - 2;
@@ -278,17 +265,14 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 
 void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_vels, int tt)
 {
-  const double c_sq = 1.0 / 3.0; /* square of speed of sound */
-  const double w0 = 4.0 / 9.0;   /* weighting factor */
-  const double w1 = 1.0 / 9.0;  /* weighting factor */
-  const double w2 = 1.0 / 36.0; /* weighting factor */
+  // increase for precision
+  const double c_sq = 0.333333333333; /* square of speed of sound */
+  const double w0 =   0.444444444444;   /* weighting factor */
+  const double w1 =   0.111111111111;  /* weighting factor */
+  const double w2 =   0.027777777777; /* weighting factor */
 
   int    tot_cells = 0;  /* no. of cells used in calculation */
   double tot_u = 0.0;    /* accumulated magnitudes of velocity for each cell */
-
-  /* compute weighting factors */
-  double w1_af = params.density * params.accel / 9.0;
-  double w2_af = params.density * params.accel / 36.0;
 
   /* loop over the cells in the grid
   ** NB the collision step is called after
