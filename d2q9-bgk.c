@@ -243,6 +243,7 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
       ** scratch space grid */
       tmp_cells[ii * params.nx + jj].speeds[0]    = cells[index].speeds[0]; /* central cell, no movement */
       tmp_cells[ii * params.nx + x_e].speeds[1]   = cells[index].speeds[1]; /* east */
+      // printf("tmp = %d , cell index = %d \n",x_e,jj);
       tmp_cells[y_n * params.nx + jj].speeds[2]   = cells[index].speeds[2]; /* north */
       tmp_cells[ii * params.nx + x_w].speeds[3]   = cells[index].speeds[3]; /* west */
       tmp_cells[y_s * params.nx + jj].speeds[4]   = cells[index].speeds[4]; /* south */
@@ -316,11 +317,16 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
                          + tmp_cells[index].speeds[8]))
                      * local_density_invert;
        
+         int x_e = (jj + 1) % params.nx;
+         int x_w = (jj == 0) ? (jj + params.nx - 1) : (jj - 1);
 
-        cells[index].speeds[0] = tmp_cells[index].speeds[0]
-                                                  + params.omega 
+         int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
+         int y_n = (ii + 1) % params.ny; // Could move up
+
+
+        cells[index].speeds[0] +=                   params.omega 
                                                   * (local_density * d1 * (16 - (u_x * u_x + u_y * u_y) * 864 * d1)
-                                                    - tmp_cells[index].speeds[0]);
+                                                    - cells[index].speeds[0]);
         cells[index].speeds[1] = tmp_cells[index].speeds[1]
                                                   + params.omega
                                                   * (local_density * d1 * (4 + u_x * 12 + (u_x * u_x) * 648 * d1- (216 * d1 * (u_x * u_x + u_y * u_y)))
