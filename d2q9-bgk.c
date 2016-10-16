@@ -262,7 +262,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
 {
   int    tot_cells = 0;  /* no. of cells used in calculation */
   double tot_u = 0.0;    /* accumulated magnitudes of velocity for each cell */
-  // 
+
 
   /* loop over the cells in the grid
   ** NB the collision step is called after
@@ -302,6 +302,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
           local_density += tmp_cells[index].speeds[kk];
         }
 
+        double local_density_invert = 1 / local_density;
         /* compute x velocity component */
         double u_x = (tmp_cells[index].speeds[1]
                       + tmp_cells[index].speeds[5]
@@ -309,7 +310,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
                       - (tmp_cells[index].speeds[3]
                          + tmp_cells[index].speeds[6]
                          + tmp_cells[index].speeds[7]))
-                     / local_density;
+                     * local_density_invert;
         /* compute y velocity component */
         double u_y = (tmp_cells[index].speeds[2]
                       + tmp_cells[index].speeds[5]
@@ -317,7 +318,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
                       - (tmp_cells[index].speeds[4]
                          + tmp_cells[index].speeds[7]
                          + tmp_cells[index].speeds[8]))
-                     / local_density;
+                     * local_density_invert;
        
 
         cells[index].speeds[0] = tmp_cells[index].speeds[0]
