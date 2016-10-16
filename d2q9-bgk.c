@@ -185,8 +185,13 @@ int main(int argc, char* argv[])
 void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 {
   /* compute weighting factors */
-  double w1 = params.density * params.accel / 9.0;
-  double w2 = params.density * params.accel / 36.0;
+
+  // double w1 = 0.1 * 0.005 / 9.0;
+  // double w2 = 0.1 * 0.005 / 36.0;
+
+  double w2 = 1.0 / 72000.0;
+  double w1 = 4.0 * w2;
+
 
 
   /* modify the 2nd row of the grid */
