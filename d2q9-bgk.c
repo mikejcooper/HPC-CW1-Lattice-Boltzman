@@ -191,7 +191,7 @@ void accelerate_flow(t_speed* cells, int* obstacles)
   // array indexing: 16128 -> 16255
   for (int jj = 0; jj < 128; jj++)
   {
-    int index = 126 * 128 + jj;
+    int index = 254 * 128 + jj;
     /* if the cell is not occupied and
     ** we don't send a negative density */
     if (!obstacles[index]
@@ -216,7 +216,7 @@ void accelerate_flow(t_speed* cells, int* obstacles)
 void propagate(t_speed* cells, t_speed* tmp_cells)
 {
   /* loop over _all_ cells */
-  for (int ii = 0; ii < 128; ii++)
+  for (int ii = 0; ii < 256; ii++)
   {
     /* determine indices of axis-direction neighbours
     ** respecting periodic boundary conditions (wrap around) */
@@ -257,7 +257,7 @@ void collision(t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_ve
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 
-  for (int ii = 0; ii < 128; ii++)
+  for (int ii = 0; ii < 256; ii++)
   {
     for (int jj = 0; jj < 128; jj++)
     {
