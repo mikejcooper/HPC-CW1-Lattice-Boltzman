@@ -59,6 +59,8 @@
 #define NSPEEDS         9
 #define FINALSTATEFILE  "final_state.dat"
 #define AVVELSFILE      "av_vels.dat"
+#define d1              1 / 36.0
+
 
 /* struct to hold the parameter values */
 typedef struct
@@ -262,7 +264,6 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
 {
   int    tot_cells = 0;  /* no. of cells used in calculation */
   double tot_u = 0.0;    /* accumulated magnitudes of velocity for each cell */
-  static const double d1 = 1 / 36.0;
 
   /* loop over the cells in the grid
   ** NB the collision step is called after
