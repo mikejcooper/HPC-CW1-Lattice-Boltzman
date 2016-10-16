@@ -56,11 +56,8 @@
 #include<sys/time.h>
 #include<sys/resource.h>
 
-#define NSPEEDS         9
 #define FINALSTATEFILE  "final_state.dat"
 #define AVVELSFILE      "av_vels.dat"
-#define d1              1 / 36.0
-
 
 /* struct to hold the parameter values */
 typedef struct
@@ -77,7 +74,7 @@ typedef struct
 /* struct to hold the 'speed' values */
 typedef struct
 {
-  double speeds[NSPEEDS];
+  double speeds[9];
 } t_speed;
 
 /*
@@ -264,6 +261,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
 {
   int    tot_cells = 0;  /* no. of cells used in calculation */
   double tot_u = 0.0;    /* accumulated magnitudes of velocity for each cell */
+  static const double d1 = 1 / 36.0;
 
   /* loop over the cells in the grid
   ** NB the collision step is called after
@@ -298,7 +296,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
         /* compute local density total */
         double local_density = 0.0;
 
-        for (int kk = 0; kk < NSPEEDS; kk++)
+        for (int kk = 0; kk < 9; kk++)
         {
           local_density += tmp_cells[index].speeds[kk];
         }
@@ -364,7 +362,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
         /* local density total */
         local_density = 0.0;
 
-        for (int kk = 0; kk < NSPEEDS; kk++)
+        for (int kk = 0; kk < 9; kk++)
         {
           local_density += cells[index].speeds[kk];
         }
@@ -401,7 +399,7 @@ void av_velocity(const t_param params, t_speed* cells, int* obstacles, double* a
         /* local density total */
         double local_density = 0.0;
 
-        for (int kk = 0; kk < NSPEEDS; kk++)
+        for (int kk = 0; kk < 9; kk++)
         {
           local_density += cells[ii * params.nx + jj].speeds[kk];
         }
@@ -630,7 +628,7 @@ double total_density(const t_param params, t_speed* cells)
   {
     for (int jj = 0; jj < params.nx; jj++)
     {
-      for (int kk = 0; kk < NSPEEDS; kk++)
+      for (int kk = 0; kk < 9; kk++)
       {
         total += cells[ii * params.nx + jj].speeds[kk];
       }
@@ -672,7 +670,7 @@ int write_values(const t_param params, t_speed* cells, int* obstacles, double* a
       {
         local_density = 0.0;
 
-        for (int kk = 0; kk < NSPEEDS; kk++)
+        for (int kk = 0; kk < 9; kk++)
         {
           local_density += cells[ii * params.nx + jj].speeds[kk];
         }
