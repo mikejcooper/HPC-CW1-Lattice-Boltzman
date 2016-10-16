@@ -56,9 +56,6 @@
 #include<sys/time.h>
 #include<sys/resource.h>
 
-#define FINALSTATEFILE  "final_state.dat"
-#define AVVELSFILE      "av_vels.dat"
-
 /* struct to hold the parameter values */
 typedef struct
 {
@@ -94,10 +91,8 @@ int initialise(const char* paramfile, const char* obstaclefile,
 // int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 void accelerate_flow(const t_param params, t_speed* cells, int* obstacles);
 void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
-// int rebound(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_vels, int tt);
 int write_values(const t_param params, t_speed* cells, int* obstacles, double* av_vels);
-void my_delay();
 
 
 
@@ -108,9 +103,6 @@ int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr
 /* Sum all the densities in the grid.
 ** The total should remain constant from one timestep to the next. */
 double total_density(const t_param params, t_speed* cells);
-
-/* compute average velocity */
-void av_velocity(const t_param params, t_speed* cells, int* obstacles, double* avals, int tt);
 
 /* calculate Reynolds number */
 double calc_reynolds(const t_param params, t_speed* cells, int* obstacles, double* av_vels, int tt);
@@ -378,59 +370,6 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   av_vels[tt] = tot_u / (double)tot_cells;
 }
 
-
-
-void av_velocity(const t_param params, t_speed* cells, int* obstacles, double* av_vels, int tt)
-{
-  int    tot_cells = 0;  /* no. of cells used in calculation */
-  double tot_u;          /* accumulated magnitudes of velocity for each cell */
-
-  /* initialise */
-  tot_u = 0.0;
-
-  /* loop over all non-blocked cells */
-  for (int ii = 0; ii < params.ny; ii++)
-  {
-    for (int jj = 0; jj < params.nx; jj++)
-    {
-      /* ignore occupied cells */
-      if (!obstacles[ii * params.nx + jj])
-      {
-        /* local density total */
-        double local_density = 0.0;
-
-        for (int kk = 0; kk < 9; kk++)
-        {
-          local_density += cells[ii * params.nx + jj].speeds[kk];
-        }
-
-        /* x-component of velocity */
-        double u_x = (cells[ii * params.nx + jj].speeds[1]
-                      + cells[ii * params.nx + jj].speeds[5]
-                      + cells[ii * params.nx + jj].speeds[8]
-                      - (cells[ii * params.nx + jj].speeds[3]
-                         + cells[ii * params.nx + jj].speeds[6]
-                         + cells[ii * params.nx + jj].speeds[7]))
-                     / local_density;
-        /* compute y velocity component */
-        double u_y = (cells[ii * params.nx + jj].speeds[2]
-                      + cells[ii * params.nx + jj].speeds[5]
-                      + cells[ii * params.nx + jj].speeds[6]
-                      - (cells[ii * params.nx + jj].speeds[4]
-                         + cells[ii * params.nx + jj].speeds[7]
-                         + cells[ii * params.nx + jj].speeds[8]))
-                     / local_density;
-        /* accumulate the norm of x- and y- velocity components */
-        tot_u += sqrt((u_x * u_x) + (u_y * u_y));
-        /* increase counter of inspected cells */
-        ++tot_cells;
-      }
-    }
-  }
-
-  av_vels[tt] = tot_u / (double)tot_cells;
-}
-
 int initialise(const char* paramfile, const char* obstaclefile,
                t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr,
                int** obstacles_ptr, double** av_vels_ptr)
@@ -648,7 +587,7 @@ int write_values(const t_param params, t_speed* cells, int* obstacles, double* a
   double u_y;                   /* y-component of velocity in grid cell */
   double u;                     /* norm--root of summed squares--of u_x and u_y */
 
-  fp = fopen(FINALSTATEFILE, "w");
+  fp = fopen("final_state.dat", "w");
 
   if (fp == NULL)
   {
@@ -704,7 +643,7 @@ int write_values(const t_param params, t_speed* cells, int* obstacles, double* a
 
   fclose(fp);
 
-  fp = fopen(AVVELSFILE, "w");
+  fp = fopen("av_vels.dat", "w");
 
   if (fp == NULL)
   {
@@ -736,12 +675,6 @@ void usage(const char* exe)
 }
 
 
-void my_delay(){
-  int x = 0;
-  while(x == 1){
-
-  }
-}
 
 
 
