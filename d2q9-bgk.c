@@ -185,14 +185,8 @@ int main(int argc, char* argv[])
 void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 {
   /* compute weighting factors */
-
-  // double w1 = 0.1 * 0.005 / 9.0;
-  // double w2 = 0.1 * 0.005 / 36.0;
-
-  double w2 = 1.0 / 72000.0;
-  double w1 = 4.0 * w2;
-
-
+  double w1 = 0.1 * 0.005 / 9.0;
+  double w2 = 0.1 * 0.005 / 36.0;
 
   /* modify the 2nd row of the grid */
   int ii = params.ny - 2;
@@ -224,32 +218,32 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 {
   /* loop over _all_ cells */
-  for (int ii = 0; ii < params.ny; ii++)
+  for (int ii = 0; ii < 128; ii++)
   {
     /* determine indices of axis-direction neighbours
     ** respecting periodic boundary conditions (wrap around) */
-    int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
-    int y_n = (ii + 1) % params.ny; // Could move up
+    int y_s = (ii == 0) ? (ii + 128 - 1) : (ii - 1); // could move up
+    int y_n = (ii + 1) % 128; // Could move up
     
-    for (int jj = 0; jj < params.nx; jj++)
+    for (int jj = 0; jj < 128; jj++)
     {
-      int index = ii * params.nx + jj;
+      int index = ii * 128 + jj;
       /* determine indices of axis-direction neighbours
       ** respecting periodic boundary conditions (wrap around) */
-      int x_e = (jj + 1) % params.nx;
-      int x_w = (jj == 0) ? (jj + params.nx - 1) : (jj - 1);
+      int x_e = (jj + 1) % 128;
+      int x_w = (jj == 0) ? (jj + 128 - 1) : (jj - 1);
       /* propagate densities to neighbouring cells, following
       ** appropriate directions of travel and writing into
       ** scratch space grid */
-      tmp_cells[ii * params.nx + jj].speeds[0]    = cells[index].speeds[0]; /* central cell, no movement */
-      tmp_cells[ii * params.nx + x_e].speeds[1]   = cells[index].speeds[1]; /* east */
-      tmp_cells[y_n * params.nx + jj].speeds[2]   = cells[index].speeds[2]; /* north */
-      tmp_cells[ii * params.nx + x_w].speeds[3]   = cells[index].speeds[3]; /* west */
-      tmp_cells[y_s * params.nx + jj].speeds[4]   = cells[index].speeds[4]; /* south */
-      tmp_cells[y_n * params.nx + x_e].speeds[5]  = cells[index].speeds[5]; /* north-east */
-      tmp_cells[y_n * params.nx + x_w].speeds[6]  = cells[index].speeds[6]; /* north-west */
-      tmp_cells[y_s * params.nx + x_w].speeds[7]  = cells[index].speeds[7]; /* south-west */
-      tmp_cells[y_s * params.nx + x_e].speeds[8]  = cells[index].speeds[8]; /* south-east */
+      tmp_cells[ii * 128 + jj].speeds[0]    = cells[index].speeds[0]; /* central cell, no movement */
+      tmp_cells[ii * 128 + x_e].speeds[1]   = cells[index].speeds[1]; /* east */
+      tmp_cells[y_n * 128 + jj].speeds[2]   = cells[index].speeds[2]; /* north */
+      tmp_cells[ii * 128 + x_w].speeds[3]   = cells[index].speeds[3]; /* west */
+      tmp_cells[y_s * 128 + jj].speeds[4]   = cells[index].speeds[4]; /* south */
+      tmp_cells[y_n * 128 + x_e].speeds[5]  = cells[index].speeds[5]; /* north-east */
+      tmp_cells[y_n * 128 + x_w].speeds[6]  = cells[index].speeds[6]; /* north-west */
+      tmp_cells[y_s * 128 + x_w].speeds[7]  = cells[index].speeds[7]; /* south-west */
+      tmp_cells[y_s * 128 + x_e].speeds[8]  = cells[index].speeds[8]; /* south-east */
     }
   }
 }
@@ -265,11 +259,11 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 
-  for (int ii = 0; ii < params.ny; ii++)
+  for (int ii = 0; ii < 128; ii++)
   {
-    for (int jj = 0; jj < params.nx; jj++)
+    for (int jj = 0; jj < 128; jj++)
     {
-      int index = ii * params.nx + jj;
+      int index = ii * 128 + jj;
 
 // -------------rebound--------------------------------
       /* don't consider occupied cells */
