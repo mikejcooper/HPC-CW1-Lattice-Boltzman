@@ -392,7 +392,6 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
       }
     }
   }
-}
   av_vels[tt] = tot_u / (double)tot_cells;
 }
 
