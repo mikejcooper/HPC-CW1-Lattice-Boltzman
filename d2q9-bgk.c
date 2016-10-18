@@ -282,12 +282,12 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 // #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
-#pragma omp parallel for shared(tot_cells, tot_u) num_threads(16)
-  for (int ii = 0; ii < params.ny; ii++)
+ #pragma omp for
+for (int ii = 0; ii < params.ny; ii++)
   {
     int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
     int y_n = (ii + 1) % params.ny; // Could move up
-        printf("Thread %d fworking on data ii =  %d\n", omp_get_thread_num(), ii);
+        printf("Thread %d working on data ii =  %d\n", omp_get_thread_num(), ii);
 
     for (int jj = 0; jj < params.nx; jj++)
     {
