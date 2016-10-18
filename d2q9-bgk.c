@@ -56,6 +56,7 @@
 #include<time.h>
 #include<sys/time.h>
 #include<sys/resource.h>
+#include<omp.h>
 
 /* struct to hold the parameter values */
 typedef struct
@@ -182,6 +183,7 @@ int main(int argc, char* argv[])
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
   write_values(params, cells, obstacles, av_vels);
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
+  printf("threads  =  %d\n", omp_get_max_threads());
 
   return EXIT_SUCCESS;
 }
@@ -279,7 +281,8 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-#pragma omp parallel for schedule(dynamic,1)
+// #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
+#pragma omp parallel for schedule(dynamic,1)  
   for (int ii = 0; ii < params.ny; ii++)
   {
     int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
