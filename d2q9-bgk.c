@@ -281,8 +281,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 // #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
-#pragma omp parallel for reduction(+:tot_cells,tot_u) safelen(128)
-for (int ii = 0; ii < params.ny; ii++)
+#pragma omp parallel for reduction(+:tot_cells,tot_u) 
   {
     
     for (int jj = 0; jj < params.nx; jj++)
