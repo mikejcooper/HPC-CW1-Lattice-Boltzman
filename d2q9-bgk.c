@@ -152,7 +152,7 @@ int main(int argc, char* argv[])
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     accelerate_flow(params, cells, obstacles);
-    propagate(params, cells, tmp_cells);
+    // propagate(params, cells, tmp_cells);
     collision(params, cells, tmp_cells, obstacles, av_vels, tt);
     // av_velocity(params, cells, obstacles, av_vels, tt);
 #ifdef DEBUG
@@ -278,20 +278,25 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
 
   for (int ii = 0; ii < params.ny; ii++)
   {
+    // int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
+    // int y_n = (ii + 1) % params.ny; // Could move up
     for (int jj = 0; jj < params.nx; jj++)
     {
       int index = ii * params.nx + jj;
 
+
+      // int x_e = (jj + 1) % params.nx;
+      // int x_w = (jj == 0) ? (jj + params.nx - 1) : (jj - 1);
 // ---------Propagate---------------------------------
       // tmp_cells[index].speeds[0] = cells[index].speeds[0];
-      // tmp_cells[index].speeds[1] = cells[ii * params.nx + x_e].speeds[1];  /* east */
-      // tmp_cells[index].speeds[2] = cells[y_n * params.nx + jj].speeds[2];  /* north */
-      // tmp_cells[index].speeds[3] = cells[ii * params.nx + x_w].speeds[3];  /* west */
-      // tmp_cells[index].speeds[4] = cells[y_s * params.nx + jj].speeds[4];  /* south */
-      // tmp_cells[index].speeds[5] = cells[y_n * params.nx + x_e].speeds[5]; /* north-east */
-      // tmp_cells[index].speeds[6] = cells[y_n * params.nx + x_w].speeds[6]; /* north-west */
-      // tmp_cells[index].speeds[7] = cells[y_s * params.nx + x_w].speeds[7]; /* south-west */
-      // tmp_cells[index].speeds[8] = cells[y_s * params.nx + x_e].speeds[8]; /* south-east */
+      // tmp_cells[index].speeds[3] = cells[ii * params.nx + x_e].speeds[3];  /* east */
+      // tmp_cells[index].speeds[4] = cells[y_n * params.nx + jj].speeds[4];  /* north */
+      // tmp_cells[index].speeds[1] = cells[ii * params.nx + x_w].speeds[1];  /* west */
+      // tmp_cells[index].speeds[2] = cells[y_s * params.nx + jj].speeds[2];  /* south */
+      // tmp_cells[index].speeds[7] = cells[y_n * params.nx + x_e].speeds[7]; /* north-east */
+      // tmp_cells[index].speeds[8] = cells[y_n * params.nx + x_w].speeds[8]; /* north-west */
+      // tmp_cells[index].speeds[5] = cells[y_s * params.nx + x_w].speeds[5]; /* south-west */
+      // tmp_cells[index].speeds[6] = cells[y_s * params.nx + x_e].speeds[6]; /* south-east */
 
 // --------END------------------------------------------
 
