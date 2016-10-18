@@ -390,11 +390,11 @@ for (int ii = 0; ii < params.ny; ii++)
 
 // --------------av_velocity-----------------------------------------------
 
-        /* accumulate the norm of x- and y- velocity components */
-        tot_u += sqrt((u_x * u_x) + (u_y * u_y));
-        /* increase counter of inspected cells */
-        ++tot_cells;
-      }
+      //   /* accumulate the norm of x- and y- velocity components */
+      //   tot_u += sqrt((u_x * u_x) + (u_y * u_y));
+      //   /* increase counter of inspected cells */
+      //   ++tot_cells;
+      // }
     }
   }
   av_vels[tt] = tot_u / (double)tot_cells;
