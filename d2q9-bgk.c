@@ -279,7 +279,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-#pragma omp parallel for collapse(2) schedule(static,64) num_threads(256) 
+#pragma omp parallel for schedule(dynamic,1)
   for (int ii = 0; ii < params.ny; ii++)
   {
     int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
