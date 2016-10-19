@@ -35,5 +35,8 @@ numnodes=`wc $PBS_NODEFILE | awk '{ print $1 }'`
 
 export OMP_NUM_THREADS=$numnodes
 
-#! Run the executable
-$application $options
+# #! Run the executable
+# $application $options 
+
+#! Profile the executable
+amplxe-cl -quiet -collect hotspots -result-dir r001hs $application $options
