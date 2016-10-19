@@ -282,7 +282,6 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** are in the scratch-space grid */
 // #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
 #pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16)
-  // no loop optomisation reported
 for (int ii = 0; ii < params.ny; ii++)
   {
       int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
@@ -345,6 +344,7 @@ for (int ii = 0; ii < params.ny; ii++)
                          + cells[y_n * params.nx + x_e].speeds[7]
                          + cells[y_n * params.nx + x_w].speeds[8]))
                      * local_density_invert;
+
 
 
 
