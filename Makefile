@@ -4,7 +4,7 @@
 EXE=d2q9-bgk
 
 CC=icc
-CFLAGS= icc -O2 -vec-report3
+CFLAGS= -std=c99 -O2 -D NOFUNCCALL -qopt-report=1 -qopt-report-phase=vec
 # CFLAGS= -std=c99 -O3 -fopenmp
 # CFLAGS= -std=c99 -Wall -O3 -DDEBUG -g
 LIBS = -lm
