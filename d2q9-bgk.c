@@ -273,19 +273,16 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
 
 void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_vels, int tt)
 {
-  #pragma omp parallel default(none) 
-  {
   int    tot_cells = 0;  /* no. of cells used in calculation */
   double tot_u = 0.0;    /* accumulated magnitudes of velocity for each cell */
-  static const double d1 = 1 / 36.0;
+  static  double d1 = 1 / 36.0;
 
   /* loop over the cells in the grid
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 // #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
-
-#pragma omp for simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16)
+#pragma omp parallel for default(none) simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16)
 for (int ii = 0; ii < params.ny; ii++)
   {
       int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
@@ -395,7 +392,6 @@ for (int ii = 0; ii < params.ny; ii++)
       }
     }
   }
-}
   av_vels[tt] = tot_u / (double)tot_cells;
 }
 
