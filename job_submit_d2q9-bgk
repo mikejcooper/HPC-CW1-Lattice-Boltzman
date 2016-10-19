@@ -39,4 +39,4 @@ export OMP_NUM_THREADS=$numnodes
 # $application $options 
 
 #! Profile the executable
-amplxe-cl -quiet -collect hotspots -result-dir r001hs $application $options
+amplxe-cl -quiet -collect hotspots -result-dir r002hs $application $options
