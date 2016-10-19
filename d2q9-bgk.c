@@ -151,7 +151,6 @@ int main(int argc, char* argv[])
   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
 
   // maxIters = 4000
-  #pragma omp parallel private(cells, tmp_cells) schedule(static) num_threads(16) 
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     accelerate_flow(params, cells, obstacles);
