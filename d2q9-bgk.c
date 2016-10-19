@@ -55,7 +55,7 @@
 #include<time.h>
 #include<sys/time.h>
 #include<sys/resource.h>
-// #include<omp.h>
+#include<omp.h>
 
 /* struct to hold the parameter values */
 typedef struct
@@ -281,7 +281,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 // #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
-// #pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16)
+#pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16)
   // no loop optomisation reported
 for (int ii = 0; ii < params.ny; ii++)
   {
