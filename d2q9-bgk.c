@@ -183,6 +183,7 @@ int main(int argc, char* argv[])
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
   write_values(params, cells, obstacles, av_vels);
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
+  printf("nx=%d\n", params.nx);printf("ny=%d\n", params.ny);
 
   return EXIT_SUCCESS;
 }
