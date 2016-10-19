@@ -93,7 +93,7 @@ int initialise(const char* paramfile, const char* obstaclefile,
 // int timestep(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles);
 void accelerate_flow(const t_param params, t_speed* cells, int* obstacles);
 void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells);
-void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_vels);
+void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_vels, int tt);
 int write_values(const t_param params, t_speed* cells, int* obstacles, double* av_vels);
 
 
@@ -151,11 +151,12 @@ int main(int argc, char* argv[])
   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
 
   // maxIters = 4000
+  #pragma omp parallel for private(cells, tmp_cells) schedule(static) num_threads(16) 
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     accelerate_flow(params, cells, obstacles);
     // propagate(params, cells, tmp_cells);
-    collision(params, cells, tmp_cells, obstacles, av_vels);
+    collision(params, cells, tmp_cells, obstacles, av_vels, tt);
     t_speed* temp = cells;
     cells = tmp_cells;
     tmp_cells = temp;
@@ -271,7 +272,7 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
   }
 }
 
-void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_vels)
+void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_vels, int tt)
 {
   int    tot_cells = 0;  /* no. of cells used in calculation */
   double tot_u = 0.0;    /* accumulated magnitudes of velocity for each cell */
