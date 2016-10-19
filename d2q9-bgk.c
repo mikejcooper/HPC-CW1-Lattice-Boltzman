@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
   tic = timstr.tv_sec + (timstr.tv_usec / 1000000.0);
 
   // maxIters = 4000
-  #pragma omp parallel for private(cells, tmp_cells) schedule(static) num_threads(16) 
+  #pragma omp parallel private(cells, tmp_cells) schedule(static) num_threads(16) 
   for (int tt = 0; tt < params.maxIters; tt++)
   {
     accelerate_flow(params, cells, obstacles);
@@ -282,8 +282,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-// #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
-#pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16) 
+#pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static) proc_bind(spread) num_threads(16) 
 for (int ii = 0; ii < params.ny; ii++)
   {
       int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
