@@ -282,13 +282,12 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 // #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
-#pragma omp flush(tmp_cells,cells, params,obstacles)
 #pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static, 32) num_threads(16)
 for (int ii = 0; ii < params.ny; ii++)
   {
       int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
       int y_n = (ii + 1) % params.ny; // Could move up
-
+   #pragma omp task private(y_s,y_n)
     for (int jj = 0; jj < params.nx; jj++)
     {
       int index = ii * params.nx + jj;
@@ -317,7 +316,6 @@ for (int ii = 0; ii < params.ny; ii++)
 
         /* compute local density total */
         double local_density = 0.0;
-
         local_density += cells[ii * params.nx + jj].speeds[0];
         local_density += cells[ii * params.nx + x_e].speeds[3];
         local_density += cells[y_n * params.nx + jj].speeds[4];
@@ -327,7 +325,6 @@ for (int ii = 0; ii < params.ny; ii++)
         local_density += cells[y_n * params.nx + x_w].speeds[8];
         local_density += cells[y_s * params.nx + x_w].speeds[5];
         local_density += cells[y_s * params.nx + x_e].speeds[6];
-
 
         double local_density_invert = 1 / local_density;
         /* compute x velocity component */
