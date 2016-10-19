@@ -4,7 +4,7 @@
 EXE=d2q9-bgk
 
 CC=icc
-CFLAGS= -std=c99 -qopt-report=2 -qopt-report-phase=vec -D NOALIAS Multiply.c Driver.c -o MatVector
+CFLAGS= -std=c99 -qopt-report=2 -qopt-report-phase=vec -D NOALIAS
 # CFLAGS= -std=c99 -O3 -fopenmp
 # CFLAGS= -std=c99 -Wall -O3 -DDEBUG -g
 LIBS = -lm
