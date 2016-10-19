@@ -3,9 +3,9 @@
 # EXE=temp
 EXE=d2q9-bgk
 
-CC=gcc
-# CFLAGS= -std=c99 -xSSE4.2 
-CFLAGS= -std=c99 -O3 -fopenmp
+CC=icc
+CFLAGS= -std=c99 -xSSE4.2 -openmp
+# CFLAGS= -std=c99 -O3 -fopenmp
 # CFLAGS= -std=c99 -Wall -O3 -DDEBUG -g
 LIBS = -lm
 
