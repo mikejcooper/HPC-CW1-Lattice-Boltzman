@@ -283,12 +283,11 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** are in the scratch-space grid */
 // #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
 #pragma omp parallel default(none) 
-#pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static, 32) num_threads(16)
+#pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16)
 for (int ii = 0; ii < params.ny; ii++)
   {
       int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
       int y_n = (ii + 1) % params.ny; // Could move up
-   #pragma omp task private(y_s,y_n)
     for (int jj = 0; jj < params.nx; jj++)
     {
       int index = ii * params.nx + jj;
