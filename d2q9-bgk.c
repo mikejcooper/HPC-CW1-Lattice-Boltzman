@@ -287,7 +287,7 @@ for (int ii = 0; ii < params.ny; ii++)
   {
       int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
       int y_n = (ii + 1) % params.ny; // Could move up
-    
+     #pragma omp simd
     for (int jj = 0; jj < params.nx; jj++)
     {
       int index = ii * params.nx + jj;
