@@ -343,9 +343,9 @@ for (int ii = 0; ii < params.ny; ii++)
                       - (cells[y_n * params.nx + jj].speeds[4]
                          + cells[y_n * params.nx + x_e].speeds[7]
                          + cells[y_n * params.nx + x_w].speeds[8]))
-                     * local_density_invert;
+                     * local_density_invert; 
 
-
+ 
 
 
         tmp_cells[index].speeds[0] = cells[ii * params.nx + jj].speeds[0]                   
