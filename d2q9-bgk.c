@@ -190,7 +190,7 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   // double w2 = 0.1 * 0.005 / 36.0;
 
   double w2 = 1.0 / 72000.0;
-  double w1 = 4.0 * w2;
+  // double 4.0 * w2 = 4.0 * w2;
 
   /* modify the 2nd row of the grid */
   int ii = params.ny - 2;
@@ -201,16 +201,16 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
     /* if the cell is not occupied and
     ** we don't send a negative density */
     if (!obstacles[index]
-        && (cells[index].speeds[3] - w1) > 0.0
+        && (cells[index].speeds[3] - 4.0 * w2) > 0.0
         && (cells[index].speeds[6] - w2) > 0.0
         && (cells[index].speeds[7] - w2) > 0.0)
     {
       /* increase 'east-side' densities */
-      cells[index].speeds[1] += w1;
+      cells[index].speeds[1] += 4.0 * w2;
       cells[index].speeds[5] += w2;
       cells[index].speeds[8] += w2;
       /* decrease 'west-side' densities */
-      cells[index].speeds[3] -= w1;
+      cells[index].speeds[3] -= 4.0 * w2;
       cells[index].speeds[6] -= w2;
       cells[index].speeds[7] -= w2;
     }
