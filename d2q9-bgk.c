@@ -703,3 +703,7 @@ void usage(const char* exe)
 
 
 
+
+
+// d2q9-bgk input_128x128.params obstacles_128x128.dat
+//     printf("value: %d==\n", tt);
