@@ -4,7 +4,7 @@
 EXE=d2q9-bgk
 
 CC=icc
-CFLAGS= -std=c99 -O3 -qopenmp -fast
+CFLAGS= -std=c99 -O3 -openmp -fast
 
 # CFLAGS= -std=c99 -O3 -fopenmp
 # CFLAGS= -std=c99 -Wall -O3 -DDEBUG -g
