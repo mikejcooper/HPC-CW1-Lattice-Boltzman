@@ -281,6 +281,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
 // #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
+
 #pragma simd
 #pragma omp parallel for reduction(+:tot_cells,tot_u) schedule(static) num_threads(16)
 for (int ii = 0; ii < params.ny; ii++)
@@ -389,7 +390,7 @@ for (int ii = 0; ii < params.ny; ii++)
 // --------------av_velocity-----------------------------------------------
 
         /* accumulate the norm of x- and y- velocity components */
-        tot_u += sqrt((u_x * u_x) + (u_y * u_y)); // move might make FASTER
+        tot_u += sqrt((u_x * u_x) + (u_y * u_y));
         /* increase counter of inspected cells */
         ++tot_cells;
       }
