@@ -270,7 +270,7 @@ void propagate(const t_param params, t_speed* cells, t_speed* tmp_cells)
   }
 }
 
-void collision(const t_param params, t_speed* restrict cells, t_speed* restrict tmp_cells, int* obstacles, double* av_vels, int tt)
+void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* obstacles, double* av_vels, int tt)
 {
   int    tot_cells = 0;  /* no. of cells used in calculation */
   double tot_u = 0.0;    /* accumulated magnitudes of velocity for each cell */
@@ -280,7 +280,8 @@ void collision(const t_param params, t_speed* restrict cells, t_speed* restrict 
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-#pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16) 
+// #pragma omp parallel for schedule(dynamic,1) reduction(+: tot_u, tot_cells)
+#pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16)
 for (int ii = 0; ii < params.ny; ii++)
   {
       int y_s = (ii == 0) ? (ii + params.ny - 1) : (ii - 1); // could move up
@@ -699,7 +700,6 @@ void usage(const char* exe)
   fprintf(stderr, "Usage: %s <paramfile> <obstaclefile>\n", exe);
   exit(EXIT_FAILURE);
 }
-
 
 
 
