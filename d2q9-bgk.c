@@ -197,8 +197,7 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   // array ii * params.nx + jjing: 16128 -> 16255
   for (int jj = 0; jj < params.nx; jj++)
   {
-    int ii * params.nx + jj = ii * params.nx + jj;
-    /* if the cell is not occupied and
+      /* if the cell is not occupied and
     ** we don't send a negative density */
     if (!obstacles[ii * params.nx + jj]
         && (cells[ii * params.nx + jj].speeds[3] - w1) > 0.0
