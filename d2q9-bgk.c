@@ -280,7 +280,7 @@ void collision(const t_param params, t_speed* cells, t_speed* tmp_cells, int* ob
   ** NB the collision step is called after
   ** the propagate step and so values of interest
   ** are in the scratch-space grid */
-#pragma IVDEP
+#pragma ivdep
 #pragma omp parallel for simd reduction(+:tot_cells,tot_u) schedule(static) num_threads(16) 
 for (int ii = 0; ii < params.ny; ii++)
   {
