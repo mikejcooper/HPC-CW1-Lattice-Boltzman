@@ -3,7 +3,7 @@
 # EXE=temp
 EXE=d2q9-bgk
 
-CC=icc
+CC=icpc
 CFLAGS= -std=c99 -xSSE4.2 -openmp -fast
 
 # CFLAGS= -std=c99 -O3 -fopenmp
