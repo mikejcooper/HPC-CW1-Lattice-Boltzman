@@ -343,7 +343,7 @@ for (int ii = 0; ii < params.ny; ii++)
                       - (cells[y_n * params.nx + jj].speeds[4]
                          + cells[y_n * params.nx + x_e].speeds[7]
                          + cells[y_n * params.nx + x_w].speeds[8]))
-                     * local_density_invert; 
+                     * local_density_invert;
 
  
 
@@ -362,7 +362,7 @@ for (int ii = 0; ii < params.ny; ii++)
                                                     - cells[y_s * params.nx + jj].speeds[2]);
         tmp_cells[index].speeds[3] = cells[ii * params.nx + x_e].speeds[3]
                                                   + params.omega
-                                                  * (local_density * d1 * (4 + - u_x * 12 + (- u_x * - u_x) * 648 * d1 - (216 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (4 + - u_x * 12 + (u_x * u_x) * 648 * d1 - (216 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[ii * params.nx + x_e].speeds[3]);
         tmp_cells[index].speeds[4] = cells[y_n * params.nx + jj].speeds[4]
                                                   + params.omega
