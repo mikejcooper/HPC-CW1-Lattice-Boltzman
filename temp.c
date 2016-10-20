@@ -1,9 +1,14 @@
+        double sq_xy = u_x * u_x + u_y * u_y;
+        doubel sq_x = u_x * u_x;
+        doubel sq_y = u_y * u_y;
 
-        tmp_cells[index].speeds[0] = cells[ii * params.nx + jj].speeds[0] * (1 - params.omega)                 
-                                                  + params.omega * (local_density * d1 * (16 - (u_x * u_x + u_y * u_y) * 864 * d1));
+        tmp_cells[index].speeds[0] = cells[ii * params.nx + jj].speeds[0]                   
+                                                  + params.omega 
+                                                  * (local_density * d1 * (16 - (u_x * u_x + u_y * u_y) * 864 * d1)
+                                                    - cells[ii * params.nx + jj].speeds[0]);
         tmp_cells[index].speeds[1] = cells[ii * params.nx + x_w].speeds[1]
                                                   + params.omega
-                                                  * (local_density * d1 * (4 + u_x * (12 + 432 * d1 * u_x) - 216 * d1 * u_y * u_y)
+                                                  * (local_density * d1 * (4 + u_x * 12 + (u_x * u_x) * 648 * d1- (216 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[ii * params.nx + x_w].speeds[1]);
         tmp_cells[index].speeds[2] = cells[y_s * params.nx + jj].speeds[2]
                                                   + params.omega
