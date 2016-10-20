@@ -292,8 +292,6 @@ for (int ii = 0; ii < params.ny; ii++)
 
       int x_e = (jj + 1) % params.nx;
       int x_w = (jj == 0) ? (jj + params.nx - 1) : (jj - 1);
-      double temp = 0.0;
-      int temp2 = 0;
 
 // -------------rebound--------------------------------
       /* don't consider occupied cells */
@@ -389,12 +387,10 @@ for (int ii = 0; ii < params.ny; ii++)
 // --------------av_velocity-----------------------------------------------
 
         /* accumulate the norm of x- and y- velocity components */
-        temp = sqrt((u_x * u_x) + (u_y * u_y));
+        tot_u += sqrt((u_x * u_x) + (u_y * u_y));
         /* increase counter of inspected cells */
-        temp2 = 1;
+        ++tot_cells;
       }
-      tot_cells += temp2;
-      tot_u += temp;
     }
   }
   av_vels[tt] = tot_u / (double)tot_cells;
