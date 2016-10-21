@@ -316,19 +316,19 @@ for (int ii = 0; ii < params.ny; ii++)
                                                     - cells[y_n * params.nx + jj].speeds[4]);
         tmp_cells[index].speeds[5] = cells[y_s * params.nx + x_w].speeds[5]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 + (u_x + u_y) * 3 + ((u_x * u_x + u_y * u_y) - 2 * (u_y * u_x)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 + (u_x + u_y) * 3 + ((u_x + u_y) * (u_x + u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_s * params.nx + x_w].speeds[5]); 
         tmp_cells[index].speeds[6] = cells[y_s * params.nx + x_e].speeds[6]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 + (- u_x + u_y) * 3 + ((u_x * u_x + u_y * u_y) + 2 * (u_y * u_x)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 + (- u_x + u_y) * 3 + ((- u_x + u_y) * (- u_x + u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_s * params.nx + x_e].speeds[6]);
         tmp_cells[index].speeds[7] = cells[y_n * params.nx + x_e].speeds[7] 
                                                   + params.omega
-                                                  * (local_density * d1 * (1 + (- u_x - u_y) * 3 + ((u_x * u_x + u_y * u_y) - 2 * (u_y * u_x)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 + (- u_x - u_y) * 3 + ((- u_x - u_y) * (- u_x - u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_n * params.nx + x_e].speeds[7]);
         tmp_cells[index].speeds[8] = cells[y_n * params.nx + x_w].speeds[8]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 + (u_x - u_y) * 3 + ((u_x * u_x + u_y * u_y) + 2 * (u_y * u_x)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 + (u_x - u_y) * 3 + ((u_x - u_y) * (u_x - u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_n * params.nx + x_w].speeds[8]);
 
 
@@ -630,4 +630,3 @@ void usage(const char* exe)
   fprintf(stderr, "Usage: %s <paramfile> <obstaclefile>\n", exe);
   exit(EXIT_FAILURE);
 }
-
