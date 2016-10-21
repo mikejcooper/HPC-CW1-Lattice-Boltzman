@@ -177,7 +177,6 @@ int main(int argc, char* argv[])
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
   write_values(params, cells, obstacles, av_vels);
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
-  printf("nx=%d\n", params.nx);printf("ny=%d\n", params.ny);
 
   return EXIT_SUCCESS;
 }
@@ -515,14 +514,6 @@ int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr
   *av_vels_ptr = NULL;
 
   return EXIT_SUCCESS;
-}
-
-
-double calc_reynolds(const t_param params, t_speed* cells, int* obstacles, double* av_vels)
-{
-  const double viscosity = 1.0 / 6.0 * (2.0 / params.omega - 1.0);
-
-  return av_velocity(params, cells, obstacles, av_vels) * params.reynolds_dim / viscosity;
 }
 
 double total_density(const t_param params, t_speed* cells)
