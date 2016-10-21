@@ -330,7 +330,7 @@ for (int ii = 0; ii < params.ny; ii++)
                                                     - cells[y_n * params.nx + x_w].speeds[8]);
 
 
-// --------------av_velocity-----------------------------------------------
+// --------------av_velocity------------------------------------------------
 
         /* accumulate the norm of x- and y- velocity components */
         tot_u += sqrt((u_x * u_x) + (u_y * u_y));
