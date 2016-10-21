@@ -650,5 +650,3 @@ void usage(const char* exe)
   exit(EXIT_FAILURE);
 }
 
-
-
