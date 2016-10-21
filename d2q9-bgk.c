@@ -262,9 +262,7 @@ for (int ii = 0; ii < params.ny; ii++)
       {
 
         /* compute local density total */
-        double local_density = 0.0;
-
-        local_density += cells[ii * params.nx + jj].speeds[0];
+        double local_density = cells[ii * params.nx + jj].speeds[0];
         local_density += cells[ii * params.nx + x_e].speeds[3];
         local_density += cells[y_n * params.nx + jj].speeds[4];
         local_density += cells[ii * params.nx + x_w].speeds[1];
