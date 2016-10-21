@@ -331,6 +331,7 @@ for (int ii = 0; ii < params.ny; ii++)
         tmp_cells[index].speeds[8] = cells[y_n * params.nx + x_w].speeds[8]
                                                   + params.omega
                                                   * (local_density * d1 * (1 + (u_x - u_y) * 3 + 108 * d1 * (u_x * u_x + u_y * u_y + 3 * u_x * u_y))
+                                                    - cells[y_n * params.nx + x_w].speeds[8]);
 
 
 // --------------av_velocity-----------------------------------------------
