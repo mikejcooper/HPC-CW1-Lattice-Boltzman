@@ -243,22 +243,22 @@ for (int ii = 0; ii < params.ny; ii++)
 
 // -------------rebound---------------------------------
       /* don't consider occupied cells */
-      if (obstacles[index])
-      {
-        /* called after propagate, so taking values from scratch space
-        ** mirroring, and writing into main grid */
-        tmp_cells[index].speeds[1] = cells[ii * params.nx + x_e].speeds[3];
-        tmp_cells[index].speeds[2] = cells[y_n * params.nx + jj].speeds[4];
-        tmp_cells[index].speeds[3] = cells[ii * params.nx + x_w].speeds[1];
-        tmp_cells[index].speeds[4] = cells[y_s * params.nx + jj].speeds[2];
-        tmp_cells[index].speeds[5] = cells[y_n * params.nx + x_e].speeds[7];
-        tmp_cells[index].speeds[6] = cells[y_n * params.nx + x_w].speeds[8];
-        tmp_cells[index].speeds[7] = cells[y_s * params.nx + x_w].speeds[5];
-        tmp_cells[index].speeds[8] = cells[y_s * params.nx + x_e].speeds[6];
-      } 
+      // if (obstacles[index])
+      // {
+      //   /* called after propagate, so taking values from scratch space
+      //   ** mirroring, and writing into main grid */
+      //   tmp_cells[index].speeds[1] = cells[ii * params.nx + x_e].speeds[3];
+      //   tmp_cells[index].speeds[2] = cells[y_n * params.nx + jj].speeds[4];
+      //   tmp_cells[index].speeds[3] = cells[ii * params.nx + x_w].speeds[1];
+      //   tmp_cells[index].speeds[4] = cells[y_s * params.nx + jj].speeds[2];
+      //   tmp_cells[index].speeds[5] = cells[y_n * params.nx + x_e].speeds[7];
+      //   tmp_cells[index].speeds[6] = cells[y_n * params.nx + x_w].speeds[8];
+      //   tmp_cells[index].speeds[7] = cells[y_s * params.nx + x_w].speeds[5];
+      //   tmp_cells[index].speeds[8] = cells[y_s * params.nx + x_e].speeds[6];
+      // } 
 // ----------------END--------------------------------------------
-      else 
-      {
+      // else 
+      // {
 
         /* compute local density total */
         double local_density = cells[ii * params.nx + jj].speeds[0];
@@ -337,7 +337,7 @@ for (int ii = 0; ii < params.ny; ii++)
         tot_u += sqrt((u_x * u_x) + (u_y * u_y));
         /* increase counter of inspected cells */
         ++tot_cells;
-      }
+      // }
     }
   }
   av_vels[tt] = tot_u / (double)tot_cells;
