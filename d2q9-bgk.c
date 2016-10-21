@@ -178,6 +178,7 @@ int main(int argc, char* argv[])
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
   write_values(params, cells, obstacles, av_vels);
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
+  printf("nx=%d\n", params.nx);printf("ny=%d\n", params.ny);
 
   return EXIT_SUCCESS;
 }
@@ -186,14 +187,18 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 {
   /* compute weighting factors */
 
+  // double w1 = 0.1 * 0.005 / 9.0;
+  // double w2 = 0.1 * 0.005 / 36.0;
+
   double w2 = 1.0 / 72000.0;
   double w1 = 4.0 * w2;
 
   /* modify the 2nd row of the grid */
+  int ii = params.ny - 2;
   // array indexing: 16128 -> 16255
   for (int jj = 0; jj < params.nx; jj++)
   {
-    int index = (params.ny - 2) * params.nx + jj;
+    int index = ii * params.nx + jj;
     /* if the cell is not occupied and
     ** we don't send a negative density */
     if (!obstacles[index]
@@ -238,7 +243,7 @@ for (int ii = 0; ii < params.ny; ii++)
       int x_e = (jj + 1) % params.nx;
       int x_w = (jj == 0) ? (jj + params.nx - 1) : (jj - 1);
 
-// -------------rebound---------------------------------
+// -------------rebound--------------------------------
       /* don't consider occupied cells */
       if (obstacles[index])
       {
@@ -258,7 +263,9 @@ for (int ii = 0; ii < params.ny; ii++)
       {
 
         /* compute local density total */
-        double local_density = cells[ii * params.nx + jj].speeds[0];
+        double local_density = 0.0;
+
+        local_density += cells[ii * params.nx + jj].speeds[0];
         local_density += cells[ii * params.nx + x_e].speeds[3];
         local_density += cells[y_n * params.nx + jj].speeds[4];
         local_density += cells[ii * params.nx + x_w].speeds[1];
@@ -328,7 +335,7 @@ for (int ii = 0; ii < params.ny; ii++)
                                                     - cells[y_n * params.nx + x_w].speeds[8]);
 
 
-// --------------av_velocity------------------------------------------------
+// --------------av_velocity-----------------------------------------------
 
         /* accumulate the norm of x- and y- velocity components */
         tot_u += sqrt((u_x * u_x) + (u_y * u_y));
@@ -454,6 +461,15 @@ int initialise(const char* paramfile, const char* obstaclefile,
     }
   }
 
+  // /* first set all cells in obstacle array to zero */
+  // for (int ii = 0; ii < params->ny; ii++)
+  // {
+  //   for (int jj = 0; jj < params->nx; jj++)
+  //   {
+  //     (*obstacles_ptr)[ii * params->nx + jj] = 0;
+  //   }
+  // }
+
   /* open the obstacle data file */
   fp = fopen(obstaclefile, "r");
 
@@ -511,6 +527,14 @@ int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr
 
   return EXIT_SUCCESS;
 }
+
+
+// double calc_reynolds(const t_param params, t_speed* cells, int* obstacles, double* av_vels)
+// {
+//   const double viscosity = 1.0 / 6.0 * (2.0 / params.omega - 1.0);
+
+//   return av_velocity(params, cells, obstacles, av_vels) * params.reynolds_dim / viscosity;
+// }
 
 double total_density(const t_param params, t_speed* cells)
 {
@@ -626,3 +650,10 @@ void usage(const char* exe)
   fprintf(stderr, "Usage: %s <paramfile> <obstaclefile>\n", exe);
   exit(EXIT_FAILURE);
 }
+
+
+
+
+
+// d2q9-bgk input_128x128.params obstacles_128x128.dat
+//     printf("value: %d==\n", tt);
