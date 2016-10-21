@@ -197,7 +197,8 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   // array ii * params.nx + jjing: 16128 -> 16255
   for (int jj = 0; jj < params.nx; jj++)
   {
-      /* if the cell is not occupied and
+    int ii * params.nx + jj = ii * params.nx + jj;
+    /* if the cell is not occupied and
     ** we don't send a negative density */
     if (!obstacles[ii * params.nx + jj]
         && (cells[ii * params.nx + jj].speeds[3] - w1) > 0.0
@@ -236,6 +237,8 @@ for (int ii = 0; ii < params.ny; ii++)
       
     for (int jj = 0; jj < params.nx; jj++)
     {
+      int ii * params.nx + jj = ii * params.nx + jj;
+
       int x_e = (jj + 1) % params.nx;
       int x_w = (jj == 0) ? (jj + params.nx - 1) : (jj - 1);
 
@@ -290,7 +293,7 @@ for (int ii = 0; ii < params.ny; ii++)
                          + cells[y_n * params.nx + x_w].speeds[8]))
                      * local_density_invert;
 
- 
+ // New try
 
 
         tmp_cells[ii * params.nx + jj].speeds[0] = cells[ii * params.nx + jj].speeds[0]                   
@@ -319,11 +322,11 @@ for (int ii = 0; ii < params.ny; ii++)
                                                     - cells[y_s * params.nx + x_w].speeds[5]); 
         tmp_cells[ii * params.nx + jj].speeds[6] = cells[y_s * params.nx + x_e].speeds[6]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 + (- u_x + u_y) * 3 + ((- u_x + u_y) * (- u_x + u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 - (u_x - u_y) * 3 + ((u_x - u_y) * (u_x - u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_s * params.nx + x_e].speeds[6]);
         tmp_cells[ii * params.nx + jj].speeds[7] = cells[y_n * params.nx + x_e].speeds[7]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 + (- u_x - u_y) * 3 + ((- u_x - u_y) * (- u_x - u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 - (u_x + u_y) * 3 + ((u_x + u_y) * (u_x + u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_n * params.nx + x_e].speeds[7]);
         tmp_cells[ii * params.nx + jj].speeds[8] = cells[y_n * params.nx + x_w].speeds[8]
                                                   + params.omega
