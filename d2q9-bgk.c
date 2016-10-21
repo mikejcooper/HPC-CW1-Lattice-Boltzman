@@ -177,7 +177,6 @@ int main(int argc, char* argv[])
   printf("Elapsed system CPU time:\t%.6lf (s)\n", systim);
   write_values(params, cells, obstacles, av_vels);
   finalise(&params, &cells, &tmp_cells, &obstacles, &av_vels);
-  printf("nx=%d\n", params.nx);printf("ny=%d\n", params.ny);
 
   return EXIT_SUCCESS;
 }
@@ -262,7 +261,8 @@ for (int ii = 0; ii < params.ny; ii++)
       {
 
         /* compute local density total */
-        double local_density = cells[ii * params.nx + jj].speeds[0];
+        double local_density = 0.0;
+        local_density += cells[ii * params.nx + jj].speeds[0];
         local_density += cells[ii * params.nx + x_e].speeds[3];
         local_density += cells[y_n * params.nx + jj].speeds[4];
         local_density += cells[ii * params.nx + x_w].speeds[1];
@@ -458,15 +458,6 @@ int initialise(const char* paramfile, const char* obstaclefile,
     }
   }
 
-  // /* first set all cells in obstacle array to zero */
-  // for (int ii = 0; ii < params->ny; ii++)
-  // {
-  //   for (int jj = 0; jj < params->nx; jj++)
-  //   {
-  //     (*obstacles_ptr)[ii * params->nx + jj] = 0;
-  //   }
-  // }
-
   /* open the obstacle data file */
   fp = fopen(obstaclefile, "r");
 
@@ -524,14 +515,6 @@ int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr
 
   return EXIT_SUCCESS;
 }
-
-
-// double calc_reynolds(const t_param params, t_speed* cells, int* obstacles, double* av_vels)
-// {
-//   const double viscosity = 1.0 / 6.0 * (2.0 / params.omega - 1.0);
-
-//   return av_velocity(params, cells, obstacles, av_vels) * params.reynolds_dim / viscosity;
-// }
 
 double total_density(const t_param params, t_speed* cells)
 {
