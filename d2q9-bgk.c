@@ -185,6 +185,9 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
 {
   /* compute weighting factors */
 
+  // double w1 = 0.1 * 0.005 / 9.0;
+  // double w2 = 0.1 * 0.005 / 36.0;
+
   double w2 = 1.0 / 72000.0;
   double w1 = 4.0 * w2;
 
@@ -237,7 +240,7 @@ for (int ii = 0; ii < params.ny; ii++)
       int x_e = (jj + 1) % params.nx;
       int x_w = (jj == 0) ? (jj + params.nx - 1) : (jj - 1);
 
-// -------------rebound---------------------------------
+// -------------rebound--------------------------------
       /* don't consider occupied cells */
       if (obstacles[index])
       {
@@ -327,7 +330,7 @@ for (int ii = 0; ii < params.ny; ii++)
                                                     - cells[y_n * params.nx + x_w].speeds[8]);
 
 
-// --------------av_velocity------------------------------------------------
+// --------------av_velocity-----------------------------------------------
 
         /* accumulate the norm of x- and y- velocity components */
         tot_u += sqrt((u_x * u_x) + (u_y * u_y));
