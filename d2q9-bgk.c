@@ -193,11 +193,10 @@ void accelerate_flow(const t_param params, t_speed* cells, int* obstacles)
   double w1 = 4.0 * w2;
 
   /* modify the 2nd row of the grid */
-  int ii = params.ny - 2;
   // array indexing: 16128 -> 16255
   for (int jj = 0; jj < params.nx; jj++)
   {
-    int index = ii * params.nx + jj;
+    int index = (params.ny - 2) * params.nx + jj;
     /* if the cell is not occupied and
     ** we don't send a negative density */
     if (!obstacles[index]
@@ -302,35 +301,35 @@ for (int ii = 0; ii < params.ny; ii++)
                                                     - cells[ii * params.nx + jj].speeds[0]);
         tmp_cells[index].speeds[1] = cells[ii * params.nx + x_w].speeds[1]
                                                   + params.omega
-                                                  * (local_density * d1 * (4 + u_x * 12 + ((u_x * u_x) * 648 * d1 - (216 * d1 * (u_x * u_x + u_y * u_y))))
+                                                  * (local_density * d1 * (4 + u_x * 12 + (u_x * u_x) * 648 * d1- (216 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[ii * params.nx + x_w].speeds[1]);
         tmp_cells[index].speeds[2] = cells[y_s * params.nx + jj].speeds[2]
                                                   + params.omega
-                                                  * (local_density * d1 * (4 + u_y * 12 + ((u_y * u_y) * 648 * d1 - (216 * d1 * (u_x * u_x + u_y * u_y))))
+                                                  * (local_density * d1 * (4 + u_y * 12 + (u_y * u_y) * 648 * d1 - (216 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_s * params.nx + jj].speeds[2]);
         tmp_cells[index].speeds[3] = cells[ii * params.nx + x_e].speeds[3]
                                                   + params.omega
-                                                  * (local_density * d1 * (4 - u_x * 12 + ((u_x * u_x) * 648 * d1 - (216 * d1 * (u_x * u_x + u_y * u_y))))
+                                                  * (local_density * d1 * (4 + - u_x * 12 + (u_x * u_x) * 648 * d1 - (216 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[ii * params.nx + x_e].speeds[3]);
         tmp_cells[index].speeds[4] = cells[y_n * params.nx + jj].speeds[4]
                                                   + params.omega
-                                                  * (local_density * d1 * (4 - u_y * 12 + ((u_y * u_y) * 648 * d1 - (216 * d1 * (u_x * u_x + u_y * u_y))))
+                                                  * (local_density * d1 * (4 + - u_y * 12 + (u_y * u_y) * 648 * d1 - (216 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_n * params.nx + jj].speeds[4]);
         tmp_cells[index].speeds[5] = cells[y_s * params.nx + x_w].speeds[5]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 + (u_x + u_y) * 3 + (((u_x + u_y) * (u_x + u_y)) * 162 * d1) - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 + (u_x + u_y) * 3 + ((u_x + u_y) * (u_x + u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_s * params.nx + x_w].speeds[5]); 
         tmp_cells[index].speeds[6] = cells[y_s * params.nx + x_e].speeds[6]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 - (u_x - u_y) * 3 + (((u_x - u_y) * (u_x - u_y)) * 162 * d1) - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 + (- u_x + u_y) * 3 + ((- u_x + u_y) * (- u_x + u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_s * params.nx + x_e].speeds[6]);
         tmp_cells[index].speeds[7] = cells[y_n * params.nx + x_e].speeds[7]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 - (u_x + u_y) * 3 + (((u_x + u_y) * (u_x + u_y)) * 162 * d1) - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 + (- u_x - u_y) * 3 + ((- u_x - u_y) * (- u_x - u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_n * params.nx + x_e].speeds[7]);
         tmp_cells[index].speeds[8] = cells[y_n * params.nx + x_w].speeds[8]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 + (u_x - u_y) * 3 + (((u_x - u_y) * (u_x - u_y)) * 162 * d1) - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 + (u_x - u_y) * 3 + ((u_x - u_y) * (u_x - u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_n * params.nx + x_w].speeds[8]);
 
 
@@ -460,15 +459,6 @@ int initialise(const char* paramfile, const char* obstaclefile,
     }
   }
 
-  // /* first set all cells in obstacle array to zero */
-  // for (int ii = 0; ii < params->ny; ii++)
-  // {
-  //   for (int jj = 0; jj < params->nx; jj++)
-  //   {
-  //     (*obstacles_ptr)[ii * params->nx + jj] = 0;
-  //   }
-  // }
-
   /* open the obstacle data file */
   fp = fopen(obstaclefile, "r");
 
@@ -528,12 +518,12 @@ int finalise(const t_param* params, t_speed** cells_ptr, t_speed** tmp_cells_ptr
 }
 
 
-// double calc_reynolds(const t_param params, t_speed* cells, int* obstacles, double* av_vels)
-// {
-//   const double viscosity = 1.0 / 6.0 * (2.0 / params.omega - 1.0);
+double calc_reynolds(const t_param params, t_speed* cells, int* obstacles, double* av_vels)
+{
+  const double viscosity = 1.0 / 6.0 * (2.0 / params.omega - 1.0);
 
-//   return av_velocity(params, cells, obstacles, av_vels) * params.reynolds_dim / viscosity;
-// }
+  return av_velocity(params, cells, obstacles, av_vels) * params.reynolds_dim / viscosity;
+}
 
 double total_density(const t_param params, t_speed* cells)
 {
@@ -649,10 +639,3 @@ void usage(const char* exe)
   fprintf(stderr, "Usage: %s <paramfile> <obstaclefile>\n", exe);
   exit(EXIT_FAILURE);
 }
-
-
-
-
-
-// d2q9-bgk input_128x128.params obstacles_128x128.dat
-//     printf("value: %d==\n", tt);
