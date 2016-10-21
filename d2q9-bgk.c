@@ -322,7 +322,7 @@ for (int ii = 0; ii < params.ny; ii++)
                                                     - cells[y_s * params.nx + x_w].speeds[5]); 
         tmp_cells[index].speeds[6] = cells[y_s * params.nx + x_e].speeds[6]
                                                   + params.omega
-                                                  * (local_density * d1 * (1 + (- u_x + u_y) * 3 + ((u_x + u_y) * (- u_x + u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
+                                                  * (local_density * d1 * (1 + (- u_x + u_y) * 3 + ((u_x + u_y) * (u_x + u_y)) * 162 * d1 - (54 * d1 * (u_x * u_x + u_y * u_y)))
                                                     - cells[y_s * params.nx + x_e].speeds[6]);
         tmp_cells[index].speeds[7] = cells[y_n * params.nx + x_e].speeds[7]
                                                   + params.omega
