@@ -334,6 +334,36 @@ for (int ii = 0; ii < params.ny; ii++)
 
 // --------------av_velocity-----------------------------------------------
 
+
+        local_density = 0.0;
+        local_density += tmp_cells[ii * params.nx + jj].speeds[0];
+        local_density += tmp_cells[ii * params.nx + x_e].speeds[3];
+        local_density += tmp_cells[y_n * params.nx + jj].speeds[4];
+        local_density += tmp_cells[ii * params.nx + x_w].speeds[1];
+        local_density += tmp_cells[y_s * params.nx + jj].speeds[2];
+        local_density += tmp_cells[y_n * params.nx + x_e].speeds[7];
+        local_density += tmp_cells[y_n * params.nx + x_w].speeds[8];
+        local_density += tmp_cells[y_s * params.nx + x_w].speeds[5];
+        local_density += tmp_cells[y_s * params.nx + x_e].speeds[6];
+
+
+        local_density_invert = 1 / local_density;
+        /* compute x velocity component */
+        u_x = (tmp_cells[ii * params.nx + x_w].speeds[1]
+                      + tmp_cells[y_s * params.nx + x_w].speeds[5]
+                      + tmp_cells[y_n * params.nx + x_w].speeds[8]
+                      - (tmp_cells[ii * params.nx + x_e].speeds[3]
+                         + tmp_cells[y_s * params.nx + x_e].speeds[6]
+                         + tmp_cells[y_n * params.nx + x_e].speeds[7]))
+                     * local_density_invert;
+        /* compute y velocity component */
+        u_y = (tmp_cells[y_s * params.nx + jj].speeds[2]
+                      + tmp_cells[y_s * params.nx + x_w].speeds[5]
+                      + tmp_cells[y_s * params.nx + x_e].speeds[6]
+                      - (tmp_cells[y_n * params.nx + jj].speeds[4]
+                         + tmp_cells[y_n * params.nx + x_e].speeds[7]
+                         + tmp_cells[y_n * params.nx + x_w].speeds[8]))
+                     * local_density_invert;
         /* accumulate the norm of x- and y- velocity components */
         tot_u += sqrt((u_x * u_x) + (u_y * u_y));
         /* increase counter of inspected cells */
