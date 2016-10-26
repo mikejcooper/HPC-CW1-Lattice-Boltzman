@@ -18,8 +18,7 @@ REF_AV_VELS_FILE=check/256x256.av_vels.dat
 all: $(EXE)
 
 $(EXE): 
-	$(MODULE_1) 
-	$(MODULE_2)
+	$(MODULE_1) && $(MODULE_2)
 	$(CC) $(CFLAGS) $(EXE).c $(LIBS) -o $@
 
 check:
