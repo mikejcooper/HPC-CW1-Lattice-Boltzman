@@ -19,7 +19,7 @@ all: $(EXE)
 
 $(EXE): 
 	$(MODULE_1) && $(MODULE_2)
-	&& $(EXE).c
+	$(EXE).c
 	$(CC) $(CFLAGS) $^ $(LIBS) -o $@
 
 check:
