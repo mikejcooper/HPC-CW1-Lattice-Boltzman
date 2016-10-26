@@ -1,7 +1,6 @@
 # Makefile
 SHELL:=/bin/bash
 
-
 EXE=d2q9-bgk
 CC=icc
 CFLAGS= -std=c99 -xHOST -openmp
