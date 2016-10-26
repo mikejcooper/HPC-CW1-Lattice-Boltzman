@@ -5,8 +5,8 @@ CC=icc
 CFLAGS= -std=c99 -xHOST -openmp
 LIBS = -lm
 
-MODULE_1 =module load languages/intel-compiler-15
-MODULE_2 =module load languages/python-2.7.6
+MODULE_1 =module add languages/intel-compiler-15
+MODULE_2 =module add languages/python-2.7.6
 
 FINAL_STATE_FILE=./final_state.dat
 AV_VELS_FILE=./av_vels.dat
