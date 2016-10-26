@@ -17,7 +17,7 @@ REF_AV_VELS_FILE=check/256x256.av_vels.dat
 
 all: $(EXE)
 
-'': 
+$(): 
 	module load languages/intel-compiler-15
 	module load languages/python-2.7.6
 	$(EXE).c
