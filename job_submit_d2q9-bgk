@@ -1,7 +1,5 @@
 #!/bin/bash
 
-module load languages/intel-compiler-15
-
 #PBS -N d2q9-bgk
 #PBS -joe
 #PBS -o d2q9-bgk.out
@@ -17,6 +15,8 @@ application="./d2q9-bgk"
 
 #! Run options for the application
 options="input_256x256.params obstacles_256x256.dat"
+module="module load languages/intel-compiler-15"
+
 
 ###############################################################
 ### You should not have to change anything below this line ####
@@ -38,4 +38,4 @@ numnodes=`wc $PBS_NODEFILE | awk '{ print $1 }'`
 export OMP_NUM_THREADS=$numnodes
 
 # #! Run the executable
-$application $options 
+$module $application $options 
