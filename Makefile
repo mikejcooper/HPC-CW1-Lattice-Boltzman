@@ -5,10 +5,10 @@ EXE=d2q9-bgk
 
 CC=icc
 CFLAGS= -std=c99 -xHOST -openmp
-
-# CFLAGS= -std=c99 -O3 -fopenmp
-# CFLAGS= -std=c99 -Wall -O3 -DDEBUG -g
 LIBS = -lm
+
+MODULE_1 = module load languages/intel-compiler-15
+MODULE_2 = module load languages/python-2.7.6
 
 FINAL_STATE_FILE=./final_state.dat
 AV_VELS_FILE=./av_vels.dat
@@ -17,9 +17,9 @@ REF_AV_VELS_FILE=check/256x256.av_vels.dat
 
 all: $(EXE)
 
-$(): 
-	module load languages/intel-compiler-15
-	module load languages/python-2.7.6
+$(EXE): 
+	$(MODULE_1)
+	$(MODULE_2)
 	$(EXE).c
 	$(CC) $(CFLAGS) $^ $(LIBS) -o $@
 
