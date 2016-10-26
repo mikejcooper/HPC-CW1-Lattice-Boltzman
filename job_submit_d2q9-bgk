@@ -1,5 +1,7 @@
 #!/bin/bash
 
+module add languages/intel-compiler-15
+
 #PBS -N d2q9-bgk
 #PBS -joe
 #PBS -o d2q9-bgk.out
