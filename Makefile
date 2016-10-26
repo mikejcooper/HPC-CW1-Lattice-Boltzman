@@ -18,6 +18,7 @@ REF_AV_VELS_FILE=check/256x256.av_vels.dat
 all: $(EXE)
 
 $(EXE): $(EXE).c
+	module add languages/intel-compiler-15
 	$(CC) $(CFLAGS) $^ $(LIBS) -o $@
 
 check:
