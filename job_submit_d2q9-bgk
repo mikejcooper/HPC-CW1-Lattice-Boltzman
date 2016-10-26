@@ -38,4 +38,4 @@ numnodes=`wc $PBS_NODEFILE | awk '{ print $1 }'`
 export OMP_NUM_THREADS=$numnodes
 
 # #! Run the executable
-$module $application $options 
+$module && $application $options 
