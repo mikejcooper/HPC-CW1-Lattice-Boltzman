@@ -37,6 +37,7 @@ echo `cat $PBS_NODEFILE | uniq`
 numnodes=`wc $PBS_NODEFILE | awk '{ print $1 }'`
 
 export OMP_NUM_THREADS=$numnodes
+export KMP_AFFINITY=compact
 
 # #! Run the executable
 $module && $application $options 
