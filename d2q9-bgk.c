@@ -109,6 +109,8 @@ double calc_reynolds(const t_param params, t_speed* cells, int* obstacles, doubl
 /* utility functions */
 void die(const char* message, const int line, const char* file);
 void usage(const char* exe);
+__attribute__((vector, nothrow)) void SimdEnabledFunction(double);  
+
 
 /*
 ** main program:
