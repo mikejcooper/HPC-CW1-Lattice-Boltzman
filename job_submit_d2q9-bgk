@@ -16,7 +16,7 @@ application="./d2q9-bgk"
 #! Run options for the application
 options="input_256x256.params obstacles_256x256.dat"
 
-module="module load languages/intel-compiler-15"
+module="module load languages/intel-compiler-16"
 
 
 ###############################################################
