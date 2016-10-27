@@ -40,4 +40,4 @@ export OMP_NUM_THREADS=$numnodes
 export KMP_AFFINITY=compact
 
 # #! Run the executable
-$module && $application $options 
+$application $options 
