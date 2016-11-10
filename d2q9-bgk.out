@@ -1,0 +1,10 @@
+Running on host node31-032
+Time is Thu Nov 10 20:41:06 GMT 2016
+Directory is /panfs/panasas01/cosc/mc14641/Playground/HPC-CW1-Lattice-Boltzman/HPC-CW1-Lattice-Boltzman
+PBS job ID is 5084370.master.cm.cluster
+This jobs runs on the following machines:
+node31-032
+==done==
+Elapsed time:			12.752494 (s)
+Elapsed user CPU time:		203.362084 (s)
+Elapsed system CPU time:	0.071989 (s)

@@ -3,7 +3,7 @@ SHELL:=/bin/bash
 
 EXE=d2q9-bgk
 CC=icc
-CFLAGS= -std=c99 -xHOST -openmp
+CFLAGS= -std=c99 -xHOST -openmp 
 LIBS = -lm
 
 MODULE_1 =module load languages/intel-compiler-15
@@ -28,4 +28,8 @@ check:
 
 clean:
 	rm -f $(EXE)
+
+
+# make && qsub job_submit_d2q9-bgk && make clean && watch qstat -u $USER
+
 
